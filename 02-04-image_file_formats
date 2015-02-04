@@ -1,0 +1,26 @@
+IMAGE FILE FORMATS
+
+vector - shapes defined mathematically and such; don't lose definition on account of zoom
+raster - grid of pixels, each defined
+
+re. raster:
+uncompressed - data for every pixel (bmp, tif)
+compressed - !above (jpg, png, gif)
+
+lossless* - no data has been lost from original (bmp, tif, png, gif)
+lossy - !above (jpg)
+
+*compressed files (images) can be lossless (like zip files); but, png and gif compression is usually good for just computer-generated images, not actual photographs
+
+note: some video compression is carried out by saving pixels which don't change from frame to frame, such that the whole image doesn't have to be refreshed from frame to frame
+
+----
+
+we'll be using NetPBM (raster, uncompressed, lossless)
+
+file format:
+- p3
+- xres yres
+- max color val
+(the above is the header for every file)
+<list of pixel vals>
