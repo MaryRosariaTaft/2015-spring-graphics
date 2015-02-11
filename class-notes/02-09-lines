@@ -71,6 +71,8 @@ A better algorithm:
 
 x = x_0
 y = y_0
+A = y_1 - y_0
+B = -1*(x_1 - x_0)
 d = A + .5*B
 
 while(x <= x_1)
@@ -80,3 +82,46 @@ while(x <= x_1)
 	     d += B
 	x++
 	d += A
+
+---
+
+Oh nooo!  Mr. Bill!
+
+Dividing B by two is not good--floating points are not desirable
+
+So let's just multiply everything by two...
+
+
+x = x_0
+y = y_0
+A = 2*(y_1 - y_0)
+B = -2*(x_1 - x_0)
+d = A + B/2 #dividing by two here is okay since we just multiplied by two
+
+while(x <= x_1)
+	plot(x, y)
+	if(d > 0)
+	     y++
+	     d += B
+	x++
+	d += A
+
+---
+
+But Oh nooo! again--that algorithm only works in the first octant
+
+Here's Octant II:
+
+x = x_0
+y = y_0
+A = 2*(y_1 - y_0)
+B = -2*(x_1 - x_0)
+d = A/2 + B
+
+while(y <= y_1)
+	plot(x, y)
+	if(d < 0)
+	     x++
+	     d += A
+	y++
+	d += B
