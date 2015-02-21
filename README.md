@@ -1,2 +1,8 @@
-# homework-spring-2015
-computer graphics
+Homework, Spring 2015
+==================
+
+###Computer Graphics ###
+
+Teacher: Mr. Dyrland-Weaver
+
+Languages: C, Python
