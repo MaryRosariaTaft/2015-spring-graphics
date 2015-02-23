@@ -1,0 +1,22 @@
+gotta start using LaTeX to take notes...
+
+---
+
+scalar multiplication - constant * matrix
+
+---
+
+matrix multiplication - matrix0 * matrix1
+
+NOT COMMUTATIVE
+
+- num_cols(matrix0) MUST EQUAL num_rows(matrix1)
+- num_rows(matrix0 * matrix1) == num_rows(matrix0)
+- num_cols(matrix0 * matrix1) == num_cols(matrix1)
+- etc. multiply row indicies of one by column indicies of the other for each element of the resulting matrix
+
+---
+
+multiplicative identity
+
+- indentity matricies are always squares with diagonal 1's and all else 0's
