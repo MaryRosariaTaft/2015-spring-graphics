@@ -1,6 +1,8 @@
 gotta start using LaTeX to take notes...
 
 ---
+MULTIPLICATION (i.e., how matricies work)
+---
 
 scalar multiplication - constant * matrix
 
@@ -20,3 +22,50 @@ NOT COMMUTATIVE
 multiplicative identity
 
 - indentity matricies are always squares with diagonal 1's and all else 0's
+
+---
+TRANSFORMATIONS (i.e., what matricies are good for)
+---
+
+translations
+
+(x, y, z) --> T(a, b, c) --> (x+a, y+b, z+c)
+
+1 0 0 a	  x   	      	x+a
+0 1 0 b	  y	-->	y+b
+0 0 1 c	  z		z+c
+0 0 0 1	  1		1
+
+---
+
+dilations (about the origin)
+
+(x, y, z) --> D(a, b, c) --> (ax, by, cz)
+
+a 0 0 0	  x   	      	ax
+0 b 0 0	  y	-->	by
+0 0 c 0	  z		cz
+0 0 0 1	  1		1
+
+---
+
+rotations (about the origin and ONLY one of the x, y, or z axes)
+
+Example: rotate (x0, y0) about the z axis by theta degrees
+- express (x0, y0) in polar coordinates
+  - let r be the distance from the origin to (x0, y0)
+  - let alpha be the angle between the x-axis and r
+  - (x0, y0) == (r*cos(alpha), r*sin(alpha))
+- find (x1, y1)
+  - x1 = r*cos(alpha+theta)
+       = r*cos(alpha)*cos(theta) - r*sin(alpha)*sin(theta)
+       = x*cos(theta) - y*sin(theta)
+  - y1 = r*sin(alpha+theta)
+       = y*cos(theta) + x*sin(theta)
+
+(x0, y0, z0) --> (x1, y1, z1)
+
+cos(theta) -sin(theta) 0 0	  x0   	      	x1
+sin(theta)  cos(theta) 0 0	  y0	-->	y1
+         0           0 1 0	  z0		z1
+	 0	     0 0 0	  1		 1
