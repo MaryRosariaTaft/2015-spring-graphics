@@ -63,9 +63,45 @@ Example: rotate (x0, y0) about the z axis by theta degrees
   - y1 = r*sin(alpha+theta)
        = y*cos(theta) + x*sin(theta)
 
-(x0, y0, z0) --> (x1, y1, z1)
+*about the x-axis:
+(x, y, z) --> (x, ycos(theta)-zsin(theta), ysin(theta)+zcos(theta))
+
+1      	   0  	       0 0	  x0   	      	x1
+0 cos(theta) -sin(theta) 0	  y0	-->	y1
+0 sin(theta)  cos(theta) 0	  z0		z1
+0	   0	       0 1	   1		 1
+
+*about the y-axis:
+(x, y, z) --> (xcos(theta)-zsin(theta), y, xsin(theta)+zcos(theta))
+
+cos(theta) 0 -sin(theta) 0	  x0   	      	x1
+         0 1           0 0	  y0	-->	y1
+sin(theta) 0  cos(theta) 0	  z0		z1
+	 0 0           0 1	   1		 1
+
+
+*about the z-axis:
+(x, y, z) --> (xcos(theta)-ysin(theta), xsin(theta)+ycos(theta), z)
 
 cos(theta) -sin(theta) 0 0	  x0   	      	x1
 sin(theta)  cos(theta) 0 0	  y0	-->	y1
          0           0 1 0	  z0		z1
-	 0	     0 0 0	  1		 1
+	 0	     0 0 0	   1		 1
+
+---
+
+rotating about a point which isn't the origin: translate the shape/object/etc. such that its center is at the origin, rotate, then translate back
+(inefficient but it works for now)
+
+---
+
+[dot] multiply transformation matricies by one another BEFORE [dot] multiplying by set of points
+
+let:
+E = edge matrix
+T = translation matrix
+S = scale matrix
+R = rotation matrix
+
+(R * S * T) * E yields a translated THEN scaled THEN rotated [set of] edges
+(order of transformation matrix *multiplication*--opposite order of the transformations)
