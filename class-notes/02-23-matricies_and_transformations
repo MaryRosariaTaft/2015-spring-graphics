@@ -1,4 +1,4 @@
-gotta start using LaTeX to take notes...
+2gotta start using LaTeX to take notes...
 
 ---
 MULTIPLICATION (i.e., how matricies work)
@@ -86,7 +86,7 @@ sin(theta) 0  cos(theta) 0	  z0		z1
 cos(theta) -sin(theta) 0 0	  x0   	      	x1
 sin(theta)  cos(theta) 0 0	  y0	-->	y1
          0           0 1 0	  z0		z1
-	 0	     0 0 0	   1		 1
+	 0	     0 0 1	   1		 1
 
 ---
 
