@@ -1,5 +1,45 @@
+WARNING: these notes are particularly sloppy.
+
 (x0, y0) --> (x1, y1)
 
 x = f(t) = x0 + dx*t = x0(1 - t) + x1*t
 y = g(t) = y0 + dy*t
 
+---
+
+piece-wise function example:
+
+double param_x(double t){
+       if (t < /25) return 50
+       if (t < .5) return 50 + 100 * (t - .25) * 4
+       if (t < .75) return 150
+       else return 50 + 100 * (t - .75) * 4
+}
+
+---
+
+SPLINES
+spines + l
+wait addition doesn't work like that
+noooo
+
+curves that qualify as splines are curves that join smoothly
+
+~
+
+Hermite curves - cubic spline
+given p0 and p1, endpts
+      r0 and r1, rates of change at p0 and p1
+to make a smooth transition from one into another, make p0 and r0 of the second p1 and r1 of the first
+
+Hermite parametric equations
+blending functions
+ h0(t) = 2t^3 - 3t^2 + 1
+ h1(t) = -2t^3 + 3t^2
+ h2(t) = t^3 - 2t^2 + t
+ h3(t) = t^3 - t^2
+P(t) = h0(t)*P0 + h1(t)*P1 + h2(t)*R0 + h3(t)*R1
+
+at t = 0, h0(t) = 1 and the rest = 0, so the only number that matters is P0
+at t = 1, h1(t) = 1 and the rest = 0, so the only number that matters is P1
+(try graphing the equations to see how influential each piece is at each t value between 0 and 1
