@@ -28,8 +28,8 @@ curves that qualify as splines are curves that join smoothly
 ~
 
 Hermite curves - cubic spline
-given p0 and p1, endpts
-      r0 and r1, rates of change at p0 and p1
+given P0 and P1, endpts
+      R0 and R1, rates of change at p0 and p1
 to make a smooth transition from one into another, make p0 and r0 of the second p1 and r1 of the first
 
 Hermite parametric equations
@@ -99,3 +99,11 @@ t^3 t^2 t 1  -3  3 -2 -1 = (2t^3 - 3t^2 + 1) (-2t^3 + 3t^2) (t^3 - 2t^2 + t) (t^
 	      1	 0  0  0
 
 product look familiar?
+
+---
+
+Bezier curves
+
+given P0 and P3, endpts
+      P1 and P2, pts of influence
+
