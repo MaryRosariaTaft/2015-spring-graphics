@@ -43,3 +43,59 @@ P(t) = h0(t)*P0 + h1(t)*P1 + h2(t)*R0 + h3(t)*R1
 at t = 0, h0(t) = 1 and the rest = 0, so the only number that matters is P0
 at t = 1, h1(t) = 1 and the rest = 0, so the only number that matters is P1
 (try graphing the equations to see how influential each piece is at each t value between 0 and 1
+
+------------------
+
+How do canteens reproduce?
+
+f(t) = a*t^3 + b*t^2 + c*t + d
+P(t) = h0(t)*P0 + h1(t)*P1 + h2(t)*R0 + h3(t)*R1
+
+equate f(t) and P(t)
+
+f(0) = P0 = d
+f(1) = P1 = a + b + c + d
+
+since we also know the rates of change at P0 and P1...
+
+f'(t) =  3a*t^2 + 2b*t + c
+
+f'(0) = r0 = c
+f'(1) = r1 = 3a + 2b + c
+
+matrimagic? wait
+that
+that's not how it
+matricies
+
+0 0 0 1		a		d			P0
+1 1 1 1		b		a + b + c + d		P1
+0 0 1 0	   *	c	=	c     	    	=	R0
+3 2 1 0		d		3a + 2b + c		R1
+
+H     	   *	C	=	G
+H-1	   *	G	=	C
+
+find H-1 (inverse of H) (inverse times original yields identity matrix)
+
++2 -2 +1 +1
+-3 +3 -2 -1
+ 0  0 +1  0
++1  0  0  0
+
++2 -2 +1 +1		P0		a
+-3 +3 -2 -1		P1		b
+ 0  0 +1  0	*	R0	=	c
++1  0  0  0		R1		d
+
+perform this once each for x, y, and (not here/yet but) z
+
+now a, b, c, and d can be plugged into f(t) for x, y, etc.
+
+
+       	      2 -2  1  1
+t^3 t^2 t 1  -3  3 -2 -1 = (2t^3 - 3t^2 + 1) (-2t^3 + 3t^2) (t^3 - 2t^2 + t) (t^3 - t^2)
+    	      0	 0  1  0
+	      1	 0  0  0
+
+product look familiar?
