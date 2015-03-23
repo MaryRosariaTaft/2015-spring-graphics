@@ -1,0 +1,13 @@
+the way we're going to define stuff in this class:
+
+height - y
+width - x
+depth - z
+
+boxes: given hwd (all drawn parallel to axes) and top-left-front vertex
+       determine 8 verticies
+       draw lines
+
+spheres: given center and radius
+	 evenly distributed points on the surface using rotated circles
+	 lines as always
