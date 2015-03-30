@@ -3,3 +3,6 @@ wireframe mesh v. polygon mesh
 any 3 points are always coplanar
 thus triangles
 yay
+
+also combinations of triangles can form any other polygon
+double yay
