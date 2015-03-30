@@ -11,3 +11,31 @@ boxes: given hwd (all drawn parallel to axes) and top-left-front vertex
 spheres: given center and radius
 	 evenly distributed points on the surface using rotated circles
 	 lines as always
+
+r*cos(theta) \\
+r*sin(theta)*cos(alpha) \\
+r*sin(theta)*sin(alpha) \\
+1
+
+where (r*sin(theta), r*cos(theta)) is a point on the circle
+and alpha is the angle of rotation about the x-axis (in this specific case)
+
+can either draw a circle and rotate it pi radians
+or draw a semicircle and rotate it 2pi radians
+
+pseudocode 'n' fun stuff for sphere drawn by rotation about x-axis:
+
+//gh bad comments but 
+for p: 0 -> 1 //rotation
+    for c: 0 -> 1 //circle
+    	x = r*cos(2pi*c) + cx
+	y = r*sin(2pi*c)*cos(pi*p) + cy
+	z = r*sin(2pi*c)*sin(pi*p) + cz
+
+where (cx, cy, cz) is the center
+
+tori (toruses?): like a sphere, but start with an offset
+
+x-rot matrix * circle point with y-offset
+or
+y-rot matrix * circle point with x-offset
