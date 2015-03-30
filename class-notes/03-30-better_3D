@@ -6,3 +6,8 @@ yay
 
 also combinations of triangles can form any other polygon
 double yay
+
+---
+
+change edge matrix to polygon matrix
+add_edge to add_triangle or something like that
