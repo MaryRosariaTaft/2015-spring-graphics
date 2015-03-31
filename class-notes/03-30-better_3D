@@ -17,3 +17,6 @@ add_edge to add_triangle or something like that
 USING TRIANGLES (weeeeeeeee)
 
 draw lines counterclockwise (good stuff with vectors and getting the surface normal)
+
+P_i P_(i+n) P_(i+n+1)
+P_i P_(i+n+1) P_i+1
