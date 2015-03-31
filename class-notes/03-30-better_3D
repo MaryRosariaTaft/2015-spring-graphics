@@ -11,3 +11,9 @@ double yay
 
 change edge matrix to polygon matrix
 add_edge to add_triangle or something like that
+
+---
+
+USING TRIANGLES (weeeeeeeee)
+
+draw lines counterclockwise (good stuff with vectors and getting the surface normal)
