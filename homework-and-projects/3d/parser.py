@@ -116,16 +116,19 @@ def parse_file(fname, points = [], transform = identity_matrix(), screen = new_s
                 add_rect_prism(points, p[0], p[1], p[2], p[3], p[4], p[5])
         elif(script[i] == 'm'): #munchkin (sphere)
             #3 parameters: cx, cy, radius (centered on the xy plane) OR
-            #4 parameters: cx, cy, cz, radius
+            #4 parameters: cx, cy, cz, radius OR
+            #5 parameters: cx, cy, cz, radius, axis_of_rotation
             i += 1
             p = script[i].split(" ")
             for j in range(len(p)):
                 if(p[j] != 'x' and p[j] != 'y' and p[j] != 'z'):
                     p[j] = float(p[j])
             if(len(p) == 3):
-                add_sphere(points, p[0], p[1], 0, p[2], .01, .01)
+                add_sphere(points, p[0], p[1], 0, p[2], 'x', .01, .01)
             elif(len(p) == 4):
-                add_sphere(points, p[0], p[1], p[2], p[3], .01, .01)
+                add_sphere(points, p[0], p[1], p[2], p[3], 'x', .01, .01)
+            elif(len(p) == 5):
+                add_sphere(points, p[0], p[1], p[2], p[3], p[4], .01, .01)
             else:
                 print "add_sphere: invalid number of arguments"
         elif(script[i] == 'd'): #doughnut (torus)
