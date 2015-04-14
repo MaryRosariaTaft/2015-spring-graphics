@@ -20,3 +20,8 @@ draw lines counterclockwise (good stuff with vectors and getting the surface nor
 
 P_i P_(i+n) P_(i+n+1)
 P_i P_(i+n+1) P_i+1
+
+---
+
+spheres - use semicircles
+wooohoooo
