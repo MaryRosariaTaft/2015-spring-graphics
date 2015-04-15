@@ -19,3 +19,11 @@ to find angle btwn suface normal (above) and view vector (preestablished as <0, 
 - find dot product (magnitude*cos)
   - if cos < 0, angle is obtuse
   - > 0, acute
+*how to find said dot product:
+ - let n be the surface normal and v be the view vector
+   - dot product: m*cos(theta) = n_x*v_x + n_y*v_y + n_z*v_z
+     	 	  	       = 
+
+to make the above useful:
+- if theta is obtuse, draw the triangle
+- otherwise, don't (effectively hiding it)
