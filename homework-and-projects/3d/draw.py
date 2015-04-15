@@ -103,28 +103,53 @@ def add_rect_prism(matrix, x, y, z, w, h, d):
         add_edge(matrix, x+w, y+h, z+d, x+w, y+h, z+d)
         i += 1
 
-def add_sphere(matrix, cx, cy, cz, r, step_p, step_c):
-    p = 0
-    while(p < 1.00000000001):
-        c = 0
-        while(c < 1.00000000001):
-            x = r*math.cos(2*math.pi*c) + cx
-            y = r*math.sin(2*math.pi*c) * math.cos(math.pi*p) + cy
-            z = r*math.sin(2*math.pi*c) * math.sin(math.pi*p) + cz
-            add_edge(matrix, x, y, z, x, y, z)
-            c += step_c
-        p += step_p
+def add_sphere(matrix, cx, cy, cz, r, axis_of_rotation, step_p, step_c):
+    #could condense code more (put if-checks inside while loops) but would cause a ridiculous amount of unnecessary work
+    if(axis_of_rotation == 'z'):
+        p = 0
+        while(p < 1.00000000001):
+            c = 0
+            while(c < 1.00000000001):
+                x = r*math.cos(2*math.pi*c) * math.cos(math.pi*p) + cx
+                y = r*math.cos(2*math.pi*c) * -1*math.sin(math.pi*p) + cy
+                z = r*math.sin(2*math.pi*c) + cz
+                add_edge(matrix, x, y, z, x, y, z)
+                c += step_c
+            p += step_p
+    elif(axis_of_rotation == 'y'):
+        p = 0
+        while(p < 1.00000000001):
+            c = 0
+            while(c < 1.00000000001):
+                x = r*math.cos(2*math.pi*c) * math.cos(math.pi*p) + cx
+                y = r*math.sin(2*math.pi*c) + cy
+                z = r*math.cos(2*math.pi*c) * -1*math.sin(math.pi*p) + cz
+                add_edge(matrix, x, y, z, x, y, z)
+                c += step_c
+            p += step_p
+    elif(axis_of_rotation == 'x'):
+        p = 0
+        while(p < 1.00000000001):
+            c = 0
+            while(c < 1.00000000001):
+                x = r*math.cos(2*math.pi*c) + cx
+                y = r*math.sin(2*math.pi*c) * math.cos(math.pi*p) + cy
+                z = r*math.sin(2*math.pi*c) * math.sin(math.pi*p) + cz
+                add_edge(matrix, x, y, z, x, y, z)
+                c += step_c
+            p += step_p
+    else:
+        print "add_sphere: invalid axis_of_rotation value"
     return
 
 def add_torus(matrix, cx, cy, cz, r_t, r_c, axis_of_rotation, step_t, step_c):
-    #could condense code more (put if-checks inside while loops) but would cause a ridiculous amount of unnecessary work
     if(axis_of_rotation == 'z'):
         t = 0
         while(t < 1.00000000001):
             c = 0
             while(c < 1.00000000001):
-                x = math.cos(2*math.pi*t) * (r_c*math.cos(2*math.pi*c) + r_t) + cx
-                y = -1*math.sin(2*math.pi*t) * (r_c*math.cos(2*math.pi*c) + r_t) + cy
+                x = (r_c*math.cos(2*math.pi*c) + r_t) * math.cos(2*math.pi*t) + cx
+                y = (r_c*math.cos(2*math.pi*c) + r_t) * -1*math.sin(2*math.pi*t) + cy
                 z = r_c*math.sin(2*math.pi*c) + cz
                 add_edge(matrix, x, y, z, x, y, z)
                 c += step_c
@@ -134,9 +159,9 @@ def add_torus(matrix, cx, cy, cz, r_t, r_c, axis_of_rotation, step_t, step_c):
         while(t < 1.00000000001):
             c = 0
             while(c < 1.00000000001):
-                x = math.cos(2*math.pi*t) * (r_c*math.cos(2*math.pi*c) + r_t) + cx
+                x = (r_c*math.cos(2*math.pi*c) + r_t) * math.cos(2*math.pi*t) + cx
                 y = r_c*math.sin(2*math.pi*c) + cy
-                z = -1*math.sin(2*math.pi*t) * (r_c*math.cos(2*math.pi*c) + r_t) + cz
+                z = (r_c*math.cos(2*math.pi*c) + r_t) * -1*math.sin(2*math.pi*t) + cz
                 add_edge(matrix, x, y, z, x, y, z)
                 c += step_c
             t += step_t
@@ -146,8 +171,8 @@ def add_torus(matrix, cx, cy, cz, r_t, r_c, axis_of_rotation, step_t, step_c):
             c = 0
             while(c < 1.00000000001):
                 x = r_c*math.cos(2*math.pi*c) + cx
-                y = math.cos(2*math.pi*t) * (r_c*math.sin(2*math.pi*c) + r_t) + cy
-                z = -1*math.sin(2*math.pi*t) * (r_c*math.sin(2*math.pi*c) + r_t) + cz
+                y = (r_c*math.sin(2*math.pi*c) + r_t) * math.cos(2*math.pi*t) + cy
+                z = (r_c*math.sin(2*math.pi*c) + r_t) * -1*math.sin(2*math.pi*t) + cz
                 add_edge(matrix, x, y, z, x, y, z)
                 c += step_c
             t += step_t
