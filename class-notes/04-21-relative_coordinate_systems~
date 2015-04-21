@@ -1,0 +1,4 @@
+each shape/object has its own coordinate system
+
+accomplished by assigning a different transformation matrix to each aforementioned shape/object
+

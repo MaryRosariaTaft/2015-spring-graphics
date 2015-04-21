@@ -1,0 +1,26 @@
+currently have a global coordinate system
+
+want each shape/object to have its own coordinate system
+
+accomplish by assigning a different transformation matrix to each aforementioned shape/object
+
+coordinate systems stored as a stack (implicit tree structure)
+
+(WARNING: a human is needed to decipher these notes)
+
+- add points for a shape/object to a *temporary* edge/face matrix
+- multiply this temporary matrix by the coordinate system (transformation matrix) on the top of the stack*
+- then draw those edges/faces
+- clear/delete/wipe/annihilate the temporary matrix
+
+*the stack of transformation matricies will be set up such that each matrix contains the information from the one(s) preceding it --> all transformations are applied to the top of the stack
+
+command	      stack
+
+(init)	      I (identity matrix)
+push	      I, I (always the first step!)
+translate     I, T0*I (move the origin of the second coordinate system)
+draw	      I, T0*I (draw relative to the new origin)
+push	      I, T0*I, T0*I (create a new coordinate system connected to the previous one)
+translate     I, T0*I, T1*T0*I (move the origin of the newly-created coordinate system, relative to the origin of the previous one)
+draw	      I, T0*I, T1*T0*I (draw something relative to newest coordinate system, assumedly intentionally connected to whatever was drawn in the previous one [e.g. a torso drawn first, then a head drawn second after translating the origin upwards from the torso-origin])
