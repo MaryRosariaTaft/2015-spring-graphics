@@ -24,3 +24,25 @@ draw	      I, T0*I (draw relative to the new origin)
 push	      I, T0*I, T0*I (create a new coordinate system connected to the previous one)
 translate     I, T0*I, T1*T0*I (move the origin of the newly-created coordinate system, relative to the origin of the previous one)
 draw	      I, T0*I, T1*T0*I (draw something relative to newest coordinate system, assumedly intentionally connected to whatever was drawn in the previous one [e.g. a torso drawn first, then a head drawn second after translating the origin upwards from the torso-origin])
+
+
+-------------------------------------
+say you wanna move stuff (specific as I can possibly be!)
+assume the torso drawn first, then a head drawn second after translating the origin upwards from the torso-origin (as suggested above), and then an arm whose relative origin is at the shoulder
+
+command	      stack
+
+(init)	      I (identity matrix)
+push	      I, I (always the first step!)
+translate     I, T0*I (move the origin of the second coordinate system)
+draw	      I, T0*I (draw torso relative to the new origin)
+rotate	      I, T0*I // will rotate *torso AND head AND arm*
+push	      I, T0*I, T0*I (create a new coordinate system connected to the previous one)
+translate     I, T0*I, T1*T0*I (move the origin of the newly-created coordinate system, relative to the origin of the previous one)
+draw	      I, T0*I, T1*T0*I (draw head relative to newest coordinate system)
+rotate	      I, T0*I, T1*T0*I // will rotate *ONLY the head*
+pop	      I, T0*I (back to the torso coordinate system)
+push	      I, T0*I, T0*I (yet to move the origin away from [but still connected to] the torso-coordinate system)
+move	      I, T0*I, T2*I (new origin at the shoulder or something)
+draw	      I, T0*I, T2*I (an arm would be a good thing to draw from a shoulder)
+scale	      I, T0*I, T2*I (swollen arm? still on the shoulder-coordinate system, though) // scales *ONLY the arm*
