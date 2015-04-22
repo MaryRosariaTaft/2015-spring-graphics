@@ -1,0 +1,76 @@
+#SURFACE TORUS
+d
+0 0 0 250 50 z
+v
+y
+20
+a
+v
+i
+x
+50
+a
+v
+
+w
+
+#SURFACE SPHERE
+m
+0 0 0 250 x
+i
+x
+5
+a
+i
+y
+90
+a
+v
+
+#POINT TORUS
+dp
+-40 -50 10 250 20
+
+v0
+v1
+v
+
+i
+x
+20
+y
+20
+z
+20
+a
+v
+
+w
+
+#POINT SPHERE
+mp
+0 0 0 250 z
+v
+
+w
+
+#SURFACE BOX
+p
+0 0 0 150 250 150
+v
+x
+10
+a
+#v
+i
+y
+15
+a
+#v
+i
+z
+20
+a
+
+g
+pic.ppm
