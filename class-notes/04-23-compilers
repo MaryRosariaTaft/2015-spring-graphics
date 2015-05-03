@@ -1,0 +1,12 @@
+compilers
+~~~
+
+lexer: generates token list from source code
+
+parser: syntax checking; creates a parse tree
+
+semantic analyzer: symbol table (linked to tree as appropriate)
+
+optimizer: for vague onomatopoetic effect, the optimizer is optional
+
+code[/pixel] generator: generates machine code
