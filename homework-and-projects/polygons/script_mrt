@@ -1,0 +1,60 @@
+m
+-75 0 0 80 x
+i
+s
+2.5 .4 .4
+a
+i
+
+m
+375 0 0 70 z
+dp
+375 0 0 115 15 y
+
+p
+-500 -35 -35 70 70 70
+mp
+-175 0 0 400 y
+
+d
+0 0 0 175 30 x
+c
+0 0 0 100 x
+c
+0 0 0 75 x
+c
+0 0 0 50 x
+
+i
+x
+45
+y
+45
+z
+45
+a
+
+b
+-300 -325 -200 200 200 -200 325 300
+
+g
+pic.ppm
+
+q
+
+misc.:
+
+#TORUS
+d / dp
+cx cy cz torus_r circle_r rot
+
+#SPHERE
+m / mp
+cx cy cz r rot
+
+#BOX
+p / pv
+bottom left back width height depth
+
+*0 - edges only
+*1 - faces only

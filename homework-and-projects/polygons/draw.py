@@ -1,5 +1,4 @@
 #note on parametric functions: parameter 'step' must be given as a fraction, _not_ as the _number_ of steps to be taken
-#INCOMPLETE: add_torus
 
 from display import *
 from matrix import *
@@ -285,10 +284,6 @@ def add_sphere(matrix, cx, cy, cz, r, axis_of_rotation, step_p, step_c):
         for j in xrange(c):
             add_face1(matrix, pts[i][j], pts[i+1][j], pts[i+1][j+1])
             add_face1(matrix, pts[i+1][j+1], pts[i][j+1], pts[i][j])
-        # add_face1(matrix, pts[i][c], pts[i+1][c], pts[i+1][0])
-        # add_face1(matrix, pts[i+1][0], pts[i][0], pts[i][c])
-    # add_face1(matrix, pts[p][c], pts[0][c], pts[0][0])
-    # add_face1(matrix, pts[0][0], pts[p][0], pts[p][c])    
     return
 
 def add_torus(matrix, cx, cy, cz, r_t, r_c, axis_of_rotation, step_t, step_c):
@@ -342,10 +337,6 @@ def add_torus(matrix, cx, cy, cz, r_t, r_c, axis_of_rotation, step_t, step_c):
         for j in xrange(c):
             add_face1(matrix, pts[i][j], pts[i+1][j], pts[i+1][j+1])
             add_face1(matrix, pts[i+1][j+1], pts[i][j+1], pts[i][j])
-        # add_face1(matrix, pts[i][c], pts[i+1][c], pts[i+1][0])
-        # add_face1(matrix, pts[i+1][0], pts[i][0], pts[i][c])
-    # add_face1(matrix, pts[t][c], pts[0][c], pts[0][0])
-    # add_face1(matrix, pts[0][0], pts[t][0], pts[t][c])    
     return
 
 #DRAWING [that which has been added]
@@ -358,50 +349,38 @@ def draw_lines(matrix, screen, color):
         draw_line(screen, p0, p1, color)
     return
 
-#go through matrix 3 entries at a time and call draw_line between each set of points; backface culling to be implemented
+#go through matrix 3 entries at a time and call draw_line between each appropriate set of points
 def draw_faces(matrix, screen, color):
     for index in xrange(0, len(matrix), 3):
         p0 = matrix[index]
         p1 = matrix[index+1]
         p2 = matrix[index+2]
-        """
+        #backface culling
         if(is_frontface(p0, p1, p2)):
             draw_line(screen, p0, p1, color)
             draw_line(screen, p1, p2, color)
             draw_line(screen, p2, p0, color)
-        """
-        draw_line(screen, p0, p1, color)
-        draw_line(screen, p1, p2, color)
-        draw_line(screen, p2, p0, color)
     return
 
-"""
 def is_frontface(p0, p1, p2):
-    #vector components (vectors a and b define the plane/surface of the triangle/face)
-    ax = p1[0] - p0[0]
-    ay = p1[1] - p0[1]
-    az = p1[2] - p0[2]
-    bx = p2[0] - p0[0]
-    by = p2[1] - p0[1]
-    bz = p2[2] - p0[2]
-    #calculate surface normal
-    n = [ay*bz-az*by, az*bx-ax*bz, ax*by-ay*bx]
-    #view vector
+    #two vectors which define plane
+    a = [p1[0]-p0[0], p1[1]-p0[1], p1[2]-p0[2]]
+    b = [p2[0]-p0[0], p2[1]-p0[1], p2[2]-p0[2]]
+    #surface normal and magnitude
+    n = [a[1]*b[2]-a[2]*b[1], a[2]*b[0]-a[0]*b[2], a[0]*b[1]-a[1]*b[0]]
+    mn = math.sqrt(n[0]*n[0] + n[1]*n[1] + n[2]*n[2]) + 0.00000000000000001 #at some point I didn't handle the triangle which converges to a point on the surface sphere (as opposed to the point sphere, that is); this avoids division-by-zero errors but is insignificant enough that other operations won't be affected
+    #view vector and magnitude
     v = [0, 0, -1]
-    #if angle btwn vectors is obtuse, the surface is a frontface
-    a = get_angle(n, v)
-    if(a > math.pi/2 and a < 3*math.pi/2):
+    mv = math.sqrt(v[0]*v[0] + v[1]*v[1] + v[2]*v[2])
+    #dot product of surface normal and view vector
+    dp = n[0]*v[0] + n[1]*v[1] + n[2]*v[2]
+    #angle between surface normal and view vector
+    theta = math.acos(dp/mn/mv)
+    #obtuse angle --> is a frontface
+    if(theta > math.pi/2 and theta < 3*math.pi/2):
         return 1
+    #acute angle --> is not a frontface
     return 0
-
-#returns angle btwn two vectors in radians
-def get_angle(n, v):
-    #dot product
-    dp = n[0]*v[0], n[1]*v[1], n[2]*v[2]
-    #angle
-    a = dp/(magnitude_n*mag_v)
-    magnitude=sqrt((x2-x1)^2 + (y2-y1)^2 + (z2-z1)^2)
-"""
 
 #Bresenham's line algorithm
 def draw_line(screen, p0, p1, color):
@@ -481,10 +460,9 @@ add_rect_prism(m, 0, 0, 0, 150, 150, 150)
 draw_faces(m, s, c)
 display(s)
 print m
-"""
-"""
-if(is_frontface([0,0,0],[2,0,0],[1,2,0])):
+
+if(is_frontface([1,1,0],[2,0,0],[0,0,0])):
     print "hello"
 else:
-    print "uh-oh"
+    print "oh no"
 """

@@ -3,7 +3,7 @@ from matrix import *
 from draw import *
 
 
-def parse_file(fname, edges = [], faces = [], transform = identity_matrix(), screen = new_screen(), color = [0, 255, 255]):
+def parse_file(fname, edges = [], faces = [], transform = identity_matrix(), screen = new_screen(), color = [100, 255, 150]):
     f = open(fname, 'r')
     script = f.read().split('\n')
     i = 0
@@ -126,11 +126,11 @@ def parse_file(fname, edges = [], faces = [], transform = identity_matrix(), scr
             #5 parameters: cx, cy, cz, torus_radius, circle_radius OR
             #6 parameters: cx, cy, cz, torus_radius, circle_radius, axis_of_rotation
             if(len(p) == 4):
-                add_torus_pts(edges, p[0], p[1], 0, p[2], p[3], 'z', .01, .01)
+                add_torus_pts(edges, p[0], p[1], 0, p[2], p[3], 'z', .01, .1)
             elif(len(p) == 5):
-                add_torus_pts(edges, p[0], p[1], p[2], p[3], p[4], 'z', .01, .01)
+                add_torus_pts(edges, p[0], p[1], p[2], p[3], p[4], 'z', .01, .1)
             elif(len(p) == 6):
-                add_torus_pts(edges, p[0], p[1], p[2], p[3], p[4], p[5], .01, .01)
+                add_torus_pts(edges, p[0], p[1], p[2], p[3], p[4], p[5], .01, .1)
             else:
                 print "add_torus_pts: invalid number of arguments"
         elif(script[i] == 'p'): #prism (box)
@@ -158,11 +158,11 @@ def parse_file(fname, edges = [], faces = [], transform = identity_matrix(), scr
             #5 parameters: cx, cy, cz, torus_radius, circle_radius OR
             #6 parameters: cx, cy, cz, torus_radius, circle_radius, axis_of_rotation
             if(len(p) == 4):
-                add_torus(faces, p[0], p[1], 0, p[2], p[3], 'z', .05, .2)
+                add_torus(faces, p[0], p[1], 0, p[2], p[3], 'z', .05, .1)
             elif(len(p) == 5):
-                add_torus(faces, p[0], p[1], p[2], p[3], p[4], 'z', .05, .2)
+                add_torus(faces, p[0], p[1], p[2], p[3], p[4], 'z', .05, .1)
             elif(len(p) == 6):
-                add_torus(faces, p[0], p[1], p[2], p[3], p[4], p[5], .05, .2)
+                add_torus(faces, p[0], p[1], p[2], p[3], p[4], p[5], .05, .1)
             else:
                 print "add_torus: invalid number of arguments"
 
