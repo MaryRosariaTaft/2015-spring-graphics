@@ -1,0 +1,154 @@
+frames 50
+basename lightthing
+
+// PEG
+
+move 0 227 0
+box -25 -25 -25 50 50 50
+
+
+// ROPE
+
+push
+move 0 -25 0
+rotate y 360 around
+rotate z 15 up //"swings" the fixture
+rotate x 20 up //more swinging
+line 0 0 0 0 -50 0
+
+vary around 0 50 0 1
+vary up 0 25 0 1
+vary up 25 50 1 0
+
+// FRAME
+
+push
+rotate y 360 turn //rotates fixture 
+
+vary turn 0 50 0 1
+
+//--upper piece--//
+move 0 -50 0
+line 0 0 0 200 0 0
+line 0 0 0 -200 0 0
+line 0 0 0 0 0 200
+line 0 0 0 0 0 -200
+circle 0 0 0 200 y
+
+//--lines connecting upper piece (circle) to lower piece (torus)--//
+line 0 0 200 0 -100 200
+rotate y 45
+line 0 0 200 0 -100 200
+rotate y 45
+line 0 0 200 0 -100 200
+rotate y 45
+line 0 0 200 0 -100 200
+rotate y 45
+line 0 0 200 0 -100 200
+rotate y 45
+line 0 0 200 0 -100 200
+rotate y 45
+line 0 0 200 0 -100 200
+rotate y 45
+line 0 0 200 0 -100 200
+rotate y 45
+
+//--lower piece--//
+move 0 -100 0
+torus 0 0 0 200 20 y
+
+
+// MORE SOVEREIGN ROPES AND SPHERES CONNECTED TO EACH
+
+rotate y 22.5
+push
+move 0 0 200
+rotate x 15 jingle
+line 0 0 0 0 -150 0
+push
+move 0 -150 0
+sphere 0 0 0 25
+pop
+pop
+
+rotate y 45
+push
+move 0 0 200
+rotate x 20 jingle
+line 0 0 0 0 -150 0
+push
+move 0 -150 0
+sphere 0 0 0 25
+pop
+pop
+
+rotate y 45
+push
+move 0 0 200
+rotate x 19 jingle
+line 0 0 0 0 -150 0
+push
+move 0 -150 0
+sphere 0 0 0 25
+pop
+pop
+
+rotate y 45
+push
+move 0 0 200
+rotate z 10 jingle
+line 0 0 0 0 -150 0
+push
+move 0 -150 0
+sphere 0 0 0 25
+pop
+pop
+
+rotate y 45
+push
+move 0 0 200
+rotate x -10 jingle
+line 0 0 0 0 -150 0
+push
+move 0 -150 0
+sphere 0 0 0 25
+pop
+pop
+
+rotate y 45
+push
+move 0 0 200
+rotate x -3 jingle
+line 0 0 0 0 -150 0
+push
+move 0 -150 0
+sphere 0 0 0 25
+pop
+pop
+
+rotate y 45
+push
+move 0 0 200
+rotate z 4 jingle
+line 0 0 0 0 -150 0
+push
+move 0 -150 0
+sphere 0 0 0 25
+pop
+pop
+
+rotate y 45
+push
+move 0 0 200
+rotate z 9 jingle
+line 0 0 0 0 -150 0
+push
+move 0 -150 0
+sphere 0 0 0 25
+pop
+pop
+
+vary jingle 0 25 0 1
+vary jingle 25 50 1 0
+
+display

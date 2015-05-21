@@ -1,0 +1,9 @@
+frames 20
+basename new
+scale 3 3 3 k
+rotate x 90 something
+vary k 0 10 0.1 1 //lower bound are inclusive, upper bound exclusive; frames are indexed starting at 0
+vary k 10 20 1 0.1
+vary something 0 20 2 0
+box -15 -15 -15 100 100 100
+quit
