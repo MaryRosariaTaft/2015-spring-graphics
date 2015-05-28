@@ -1,0 +1,19 @@
+I - color value at any pixel (apply to each rgb value)
+
+I = I_ambient + I_diffuse + I_specular
+
+ambient - equal intensity from all directions
+	I_a - color of ambient light (I_r, I_g, I_b)
+	    - 0 - 255
+	k_a - ambient light constant (amt. of ambient light reflected by an object) (different for each object; can set different k_r, k_g, and k_b)
+	    - 0 - 1 (% of light reflected)
+	I_ambient = I_a * k_a
+
+diffuse - point-source lighting, matte-finish/scattered-light reflection
+	light is reflected in all directions evenly
+	compare light vector to surface normal; reflection is inversely proportional to angle between them
+		- if light vector and surface normal are normalized, their dot product == cos(angle)
+	I_p - color of point-soure light
+	I_diffuse = I_p * k_d * cos(angle)
+
+specular - also point-source, but smooth reflection
