@@ -1,3 +1,5 @@
+lost my voice again today. woohooo.
+
 I - color value at any pixel (apply to each rgb value)
 
 I = I_ambient + I_diffuse + I_specular
@@ -17,3 +19,6 @@ diffuse - point-source lighting, matte-finish/scattered-light reflection
 	I_diffuse = I_p * k_d * cos(angle)
 
 specular - also point-source, but smooth reflection
+	 I_diffuse = I_p * k_s * cos^n(angle_between_reflection_vector_and_view_vector)
+	 	   = 	       	 (dot_product((2 * normal* dot_product(normal, light_vector) - light_vector - light_vector), view_vector))^n
+		   		 ((2N(N_dot_L)-L)_dot_V)^n
