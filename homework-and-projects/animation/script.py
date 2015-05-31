@@ -118,15 +118,15 @@ def scan(commands):
     # print "vary_commands: ", vary_commands
     # print "knoblist: ", knoblist
 
+    if(d):
+        print "'display' called, but not executed (multiple frames)"
+
     i = 0
     while(i < len(knoblist)):
         # print "i =", i
         knobs = knoblist[i]
         filename = "pics/" + basename + "%03d"%i + ".png"
-        if(d):
-            parse(commands + [('save', filename)] + [('display',)], knobs)
-        else:
-            parse(commands + [('save', filename)], knobs)
+        parse(commands + [('save', filename)], knobs)
         i += 1
         # print knobs
         # print "\n"
