@@ -81,7 +81,10 @@ def scan(commands):
             pass
             #CONTINUES
     else: #no animation
-        parse(commands)
+        if(d):
+            parse(commands + [('display',)])
+        else:
+            parse(commands)
         return
 
     # print "passed if statement"
@@ -120,10 +123,10 @@ def scan(commands):
         # print "i =", i
         knobs = knoblist[i]
         filename = "pics/" + basename + "%03d"%i + ".png"
-        if(not d):
-            parse(commands + [('save', filename)], knobs)
+        if(d):
+            parse(commands + [('save', filename)] + [('display',)], knobs)
         else:
-            parse(commands + [('save', filename)] + [('display')], knobs)
+            parse(commands + [('save', filename)], knobs)
         i += 1
         # print knobs
         # print "\n"
