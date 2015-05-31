@@ -53,7 +53,7 @@ def add_circle(matrix, cx, cy, cz, r, axis_of_rotation, step):
             t += step
             x1 = r*math.cos(t*2*math.pi) + cx
             z1 = r*math.sin(t*2*math.pi) + cz
-            add_edge(matrix, x0, cy, z1, x1, cy, z1)
+            add_edge(matrix, x0, cy, z0, x1, cy, z1)
     elif(axis_of_rotation == 'x'):
         while(t < 1.00000000001):
             y0 = r*math.cos(t*2*math.pi) + cy
