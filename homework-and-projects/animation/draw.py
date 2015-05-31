@@ -1,5 +1,4 @@
 #note on parametric functions: parameter 'step' must be given as a fraction, _not_ as the _number_ of steps to be taken
-#INCOMPLETE: all backface culling stuff
 
 from display import *
 from matrix import *
