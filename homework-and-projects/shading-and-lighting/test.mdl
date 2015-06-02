@@ -6,7 +6,8 @@
 //vary k 10 20 1 0.1
 //vary something 0 20 2 0
 //sphere 0 0 0 150
+//move 0 2 0
 rotate z 45
-box 0 0 0 50 50 50
+box 0 0 0 80 80 80
 display
 quit
