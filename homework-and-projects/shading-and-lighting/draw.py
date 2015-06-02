@@ -4,6 +4,7 @@ from display import *
 from matrix import *
 import math
 import random
+import time
 
 #ADDING (points, lines, shapes, etc.)
 
@@ -394,10 +395,76 @@ def is_frontface(p0, p1, p2):
     return 0
 
 def scanline_convert(screen, p0, p1, p2, color):
-    pass
+    #set left, middle, and right
+    #progress along line from l to r AND (l to m OR and m to r)
+    #draw line from l-r to l-m OR m-r
+    pts = [p0, p1, p2]
+    #bottom
+    if(p0[1] <= p1[1] and p0[1] <= p2[1]):
+        bottom = pts.pop(0)
+    elif(p1[1] <= p0[1] and p1[1] <= p2[1]):
+        bottom = pts.pop(1)
+    else:
+        bottom = pts.pop(2)
+    #top
+    if(pts[0][1] >= pts[1][1]):
+        top = pts.pop(0)
+    else:
+        top = pts.pop(1)
+    middle = pts[0]
+
+    # print "bottom: ", bottom
+    # print "middle: ", middle
+    # print "top: ", top
+
+    y = bottom[1]
+    x0 = bottom[0]
+    z0 = bottom[2]
+    x1 = bottom[0]
+    z1 = bottom[2]
+
+    # print "\n"
+    # print "y: ", y
+    # print "x0: ", x0
+    # print "z0: ", z0
+    # print "x1: ", x1
+    # print "z1: ", z1
+
+    dxdy0 = (top[0] - bottom[0]) / (top[1] - bottom[1] + .00000000000001)
+    dzdy0 = (top[2] - bottom[2]) / (top[1] - bottom[1] + .00000000000001)
+    dxdy1 = (middle[0] - bottom[0]) / (middle[1] - bottom[1] + .00000000000001)
+    dzdy1 = (middle[2] - bottom[2]) / (middle[1] - bottom[1] + .00000000000001)
+    dxdy2 = (top[0] - middle[0]) / (top[1] - middle[1] + .00000000000001)
+    dzdy2 = (top[2] - middle[2]) / (top[1] - middle[1] + .00000000000001)
+
+    # color = [random.randint(0,255), random.randint(0,255), random.randint(0,255)]
+
+    while(y < top[1] - 1):
+        y += 1
+        x0 += dxdy0
+        z0 += dzdy0
+        if(y < middle[1]):
+            x1 += dxdy1
+            z1 += dzdy1
+        else:
+            x1 += dxdy2
+            z1 += dzdy2
+        draw_line(screen, [x0, y, z0], [x1, y, z1], color)
+
+        # print "\n"
+        # print "x: ", x
+        # print "y0: ", y0
+        # print "z0: ", z0
+        # print "y1: ", y1
+        # print "z1: ", z1
+
 
 #Bresenham's line algorithm
 def draw_line(screen, p0, p1, color):
+    # print "p0: ", p0
+    # print "p1: ", p1
+    # time.sleep(1)
+
     #assign endpoints
     if(p0[1] < p1[1] or (p0[1] == p1[1] and p0[0] < p1[0])): #octants I - IV, including horizontal lines drawn from left to right, but excluding horizontal lines drawn from right to left
         x0 = p0[0]
@@ -435,6 +502,8 @@ def draw_line(screen, p0, p1, color):
     elif(m >= 1): #octants II, VI
         d = A/2 + B
         while(yi <= y1):
+            # print "plotting"
+            # time.sleep(.5)
             plot(screen, color, xi, yi)
             if(d < 0):
                 xi += 1
@@ -463,3 +532,5 @@ def draw_line(screen, p0, p1, color):
         print "error"
 
     return
+
+# draw_line(new_screen(), [0,0,0], [0,100,0], [0,0,255])

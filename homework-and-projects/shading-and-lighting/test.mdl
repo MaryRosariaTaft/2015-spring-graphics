@@ -7,7 +7,7 @@
 //vary something 0 20 2 0
 //sphere 0 0 0 150
 //move 0 2 0
-rotate z 45
-box 0 0 0 80 80 80
+//rotate z 20
+box 0 0 0 100 100 100
 display
 quit
