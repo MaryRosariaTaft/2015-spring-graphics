@@ -3,7 +3,7 @@
 from display import *
 from matrix import *
 import math
-
+import random
 
 #ADDING (points, lines, shapes, etc.)
 
@@ -357,13 +357,14 @@ def draw_lines(matrix, screen, color):
         draw_line(screen, p0, p1, color)
     return
 
-#go through matrix 3 entries at a time and call draw_line between each set of points; backface culling implemented
+#go through matrix 3 entries at a time and call draw_line between each set of points; backface culling implemented, scanline conversion in the works
 def draw_faces(matrix, screen, color):
     for index in xrange(0, len(matrix), 3):
         p0 = matrix[index]
         p1 = matrix[index+1]
         p2 = matrix[index+2]
         if(is_frontface(p0, p1, p2)):
+            scanline_convert(screen, p0, p1, p2, color)
             draw_line(screen, p0, p1, color)
             draw_line(screen, p1, p2, color)
             draw_line(screen, p2, p0, color)
@@ -371,6 +372,84 @@ def draw_faces(matrix, screen, color):
         # draw_line(screen, p1, p2, color)
         # draw_line(screen, p2, p0, color)
     return
+
+def is_frontface(p0, p1, p2):
+    #two vectors which define plane
+    a = [p1[0]-p0[0], p1[1]-p0[1], p1[2]-p0[2]]
+    b = [p2[0]-p0[0], p2[1]-p0[1], p2[2]-p0[2]]
+    #surface normal and magnitude
+    n = [a[1]*b[2]-a[2]*b[1], a[2]*b[0]-a[0]*b[2], a[0]*b[1]-a[1]*b[0]]
+    mn = math.sqrt(n[0]*n[0] + n[1]*n[1] + n[2]*n[2])+.00000000000000001 #avoiding division by 0
+    #view vector and magnitude
+    v = [0, 0, -1]
+    mv = math.sqrt(v[0]*v[0] + v[1]*v[1] + v[2]*v[2])+.00000000000000001
+    #dot product of surface normal and view vector
+    dp = n[0]*v[0] + n[1]*v[1] + n[2]*v[2]
+    #angle between surface normal and view vector
+    theta = math.acos(dp/mn/mv)
+    #obtuse angle --> is a frontface
+    if(theta > math.pi/2 and theta < 3*math.pi/2):
+        return 1
+    #acute angle --> is not a frontface
+    return 0
+
+def scanline_convert(screen, p0, p1, p2, color):
+    pts = [p0, p1, p2]
+    #left
+    if(p0[0] < p1[0] and p0[0] < p2[0]):
+        left = pts.pop(0)
+    elif(p1[0] < p0[0] and p1[0] < p2[0]):
+        left = pts.pop(1)
+    else:
+        left = pts.pop(2)
+    #right
+    if(pts[0][0] > pts[1][0]):
+        right = pts.pop(0)
+    else:
+        right = pts.pop(1)
+    middle = pts[0]
+
+    print "\n"
+    print "left: ", left
+    print "right: ", right
+    print "middle: ", middle
+
+    #abominable variable names
+    #left-right, left-middle, and middle-right (edges of each triangle)
+    LRslope = (right[1] - left[1]) / (right[0] - left[0] + .0000000000001) #avoiding division by 0
+    LMslope = (middle[1] - left[1]) / (middle[0] - left[0] + .0000000000001)
+    MRslope = (right[1] - middle[1]) / (right[0] - middle[0] + .0000000000001)
+
+    print "LRslope: ", LRslope
+    print "LMslope: ", LMslope
+    print "MRslope: ", MRslope
+
+    #probably even worse variable names
+    #LR is left-right
+    #M is whichever edge is applicable, LM or MR
+    x = left[0]
+    LRy = left[1]
+    My = left[1]
+    color = [random.randint(0,255), random.randint(0,255), random.randint(0,255)]#TEMP
+    while(x < middle[0]):
+        print "part i"
+        draw_line(screen, [x, LRy, 0], [x, My, 0], color) #FIX have to add z-cor increment, dz/dx (actually matters for z-buffering purposes)
+        x += 1
+        LRy += LRslope
+        My += LMslope
+        print "x: ", x
+        print "LRy: ", LRy
+        print "My: ", My
+    My = middle[1]
+    while(x < right[0]):
+        draw_line(screen, [x, LRy, 0], [x, My, 0], color) #ALSO FIX
+        print "part ii"
+        x += 1
+        LRy += LRslope
+        My += MRslope
+        print "x: ", x
+        print "LRy: ", LRy
+        print "My: ", My
 
 #Bresenham's line algorithm
 def draw_line(screen, p0, p1, color):
@@ -440,22 +519,5 @@ def draw_line(screen, p0, p1, color):
 
     return
 
-def is_frontface(p0, p1, p2):
-    #two vectors which define plane
-    a = [p1[0]-p0[0], p1[1]-p0[1], p1[2]-p0[2]]
-    b = [p2[0]-p0[0], p2[1]-p0[1], p2[2]-p0[2]]
-    #surface normal and magnitude
-    n = [a[1]*b[2]-a[2]*b[1], a[2]*b[0]-a[0]*b[2], a[0]*b[1]-a[1]*b[0]]
-    mn = math.sqrt(n[0]*n[0] + n[1]*n[1] + n[2]*n[2])+.00000000000000001
-    #view vector and magnitude
-    v = [0, 0, -1]
-    mv = math.sqrt(v[0]*v[0] + v[1]*v[1] + v[2]*v[2])+.00000000000000001
-    #dot product of surface normal and view vector
-    dp = n[0]*v[0] + n[1]*v[1] + n[2]*v[2]
-    #angle between surface normal and view vector
-    theta = math.acos(dp/mn/mv)
-    #obtuse angle --> is a frontface
-    if(theta > math.pi/2 and theta < 3*math.pi/2):
-        return 1
-    #acute angle --> is not a frontface
-    return 0
+def dot_product(v0, v1):
+    pass
