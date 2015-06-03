@@ -1,13 +1,24 @@
-//frames 2
-//basename new
-//scale 3 3 3 k
-//rotate x 90 something
-//vary k 0 2 0.1 1 //lower bound is inclusive, upper bound exclusive; frames are indexed starting at 0
-//vary k 10 20 1 0.1
-//vary something 0 20 2 0
-//sphere 0 0 0 150
-//move 0 2 0
-//rotate z 20
-box 0 0 0 100 100 100
+//BOX SHADING TEST
+//
+//frames 20
+//rotate z 180 r
+//vary r 0 20 0 1
+//box 0 0 0 100 100 100
+//display
+//quit
+
+
+
+//do not
+//uncomment
+//infinite loops
+//somewhere
+//problem
+//not good
+//
+//frames 20
+//basename discoball
+//rotate z 180 r
+//vary r 0 20 0 1
+sphere 0 0 0 100 y
 display
-quit

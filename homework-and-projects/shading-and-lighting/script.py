@@ -196,8 +196,8 @@ def parse(commands, knobs = 0):
             if(not knobs): #if not animated (animated 'display' calls handled in scan())
                 t = str(time.time())
                 display(screen, "pics/"+t+".ppm")
-                # time.sleep(.3) #this is a potentially horrible way to do this but...
-                # remove("pics/"+t+".ppm")
+                time.sleep(.3) #this is a potentially horrible way to do this but...
+                remove("pics/"+t+".ppm")
         elif(cmd == 'save'):
             if(knobs):
                 save_extension(screen, p[0])

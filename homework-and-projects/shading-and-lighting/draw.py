@@ -395,9 +395,7 @@ def is_frontface(p0, p1, p2):
     return 0
 
 def scanline_convert(screen, p0, p1, p2, color):
-    #set left, middle, and right
-    #progress along line from l to r AND (l to m OR and m to r)
-    #draw line from l-r to l-m OR m-r
+
     pts = [p0, p1, p2]
     #bottom
     if(p0[1] <= p1[1] and p0[1] <= p2[1]):
@@ -437,25 +435,36 @@ def scanline_convert(screen, p0, p1, p2, color):
     dxdy2 = (top[0] - middle[0]) / (top[1] - middle[1] + .00000000000001)
     dzdy2 = (top[2] - middle[2]) / (top[1] - middle[1] + .00000000000001)
 
-    # color = [random.randint(0,255), random.randint(0,255), random.randint(0,255)]
+    # print "btx: ", dxdy0
+    # print "bmx: ", dxdy1
+    # print "mtx: ", dxdy2
 
-    while(y < top[1] - 1):
+    color = [random.randint(0,255), random.randint(0,255), random.randint(0,255)]
+
+    while(y < middle[1] - 1 and dxdy1 < 2000):
         y += 1
         x0 += dxdy0
         z0 += dzdy0
-        if(y < middle[1]):
-            x1 += dxdy1
-            z1 += dzdy1
-        else:
-            x1 += dxdy2
-            z1 += dzdy2
+        x1 += dxdy1
+        z1 += dzdy1
+        draw_line(screen, [x0, y, z0], [x1, y, z1], color)
+
+    x1 = middle[0]
+    z1 = middle[2]
+
+    while(y < top[1] - 1 and dxdy2 < 2000):
+        y += 1
+        x0 += dxdy0
+        z0 += dzdy0
+        x1 += dxdy2
+        z1 += dzdy2
         draw_line(screen, [x0, y, z0], [x1, y, z1], color)
 
         # print "\n"
-        # print "x: ", x
-        # print "y0: ", y0
+        # print "y: ", y
+        # print "x0: ", x0
         # print "z0: ", z0
-        # print "y1: ", y1
+        # print "x1: ", x1
         # print "z1: ", z1
 
 
