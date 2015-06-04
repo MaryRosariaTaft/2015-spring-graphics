@@ -519,8 +519,6 @@ def draw_line(screen, p0, p1, color):
     elif(m >= 1): #octants II, VI
         d = A/2 + B
         while(yi <= y1):
-            # print "plotting"
-            # time.sleep(.5)
             plot(screen, color, xi, yi)
             if(d < 0):
                 xi += 1
