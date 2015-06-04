@@ -15,8 +15,8 @@ BLUE = 2
 DEFAULT_COLOR = [0, 0, 0]
 
 #z-buffer
-sublist = [-100 for x in range(XRES)]
-#sublist = [-1*sys.maxint for x in range(XRES)]
+# sublist = [-100 for x in range(XRES)]
+sublist = [-1*sys.maxint for x in range(XRES)]
 zbuf = [copy.deepcopy(sublist) for y in range (YRES)]
 
 

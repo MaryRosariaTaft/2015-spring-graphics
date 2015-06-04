@@ -366,9 +366,6 @@ def draw_faces(matrix, screen, color):
         p2 = matrix[index+2]
         if(is_frontface(p0, p1, p2)):
             scanline_convert(screen, p0, p1, p2, color)
-            draw_line(screen, p0, p1, color)
-            draw_line(screen, p1, p2, color)
-            draw_line(screen, p2, p0, color)
         # draw_line(screen, p0, p1, color)
         # draw_line(screen, p1, p2, color)
         # draw_line(screen, p2, p0, color)
@@ -439,11 +436,11 @@ def scanline_convert(screen, p0, p1, p2, color):
     # print "lmx: ", dydx1
     # print "mrx: ", dydx2
 
-    # color = [random.randint(0,255), random.randint(0,255), random.randint(0,255)]
-    color = [200, 0, 240]
+    color = [random.randint(0,255), random.randint(0,255), random.randint(0,255)]
+    # color = [200, 0, 240]
 
     while(x < middle[0] and abs(dydx1) < 2000): #issues with infinitely large slopes
-        draw_line(screen, [x, y0, z0-1], [x, y1, z1-1], color)
+        draw_line(screen, [x, y0, z0], [x, y1, z1], color)
         x += 1
         y0 += dydx0
         z0 += dzdx0
@@ -461,7 +458,7 @@ def scanline_convert(screen, p0, p1, p2, color):
     z1 = middle[2]
 
     while(x < right[0] and abs(dydx2) < 2000):
-        draw_line(screen, [x, y0, z0-1], [x, y1, z1-1], color)
+        draw_line(screen, [x, y0, z0], [x, y1, z1], color)
         x += 1
         y0 += dydx0
         z0 += dzdx0
@@ -518,6 +515,7 @@ def draw_line(screen, p0, p1, color):
     A = 2*dy
     B = -2*dx
     if(not dx and not dy):
+        # pass
         while(zi <= z1):
             plot(screen, color, x0, y0, zi)
             zi += 1
