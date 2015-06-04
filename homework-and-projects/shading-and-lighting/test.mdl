@@ -3,22 +3,14 @@
 //frames 20
 //rotate z 180 r
 //vary r 0 20 0 1
-//box 0 0 0 100 100 100
+
+//rotate z 5
+//box 0 0 0 150 150 150
 //display
-//quit
 
-
-
-//do not
-//uncomment
-//infinite loops
-//somewhere
-//problem
-//not good
-//
 //frames 20
 //basename discoball
-//rotate z 180 r
+//rotate y 180 r
 //vary r 0 20 0 1
-sphere 0 0 0 100 y
+sphere 0 0 0 200 y
 display

@@ -397,74 +397,82 @@ def is_frontface(p0, p1, p2):
 def scanline_convert(screen, p0, p1, p2, color):
 
     pts = [p0, p1, p2]
-    #bottom
-    if(p0[1] <= p1[1] and p0[1] <= p2[1]):
-        bottom = pts.pop(0)
-    elif(p1[1] <= p0[1] and p1[1] <= p2[1]):
-        bottom = pts.pop(1)
+    #left
+    if(p0[0] <= p1[0] and p0[0] <= p2[0]):
+        left = pts.pop(0)
+    elif(p1[0] <= p0[0] and p1[0] <= p2[0]):
+        left = pts.pop(1)
     else:
-        bottom = pts.pop(2)
-    #top
-    if(pts[0][1] >= pts[1][1]):
-        top = pts.pop(0)
+        left = pts.pop(2)
+    #right
+    if(pts[0][0] >= pts[1][0]):
+        right = pts.pop(0)
     else:
-        top = pts.pop(1)
+        right = pts.pop(1)
     middle = pts[0]
 
-    # print "bottom: ", bottom
+    # print "left: ", left
     # print "middle: ", middle
-    # print "top: ", top
+    # print "right: ", right
 
-    y = bottom[1]
-    x0 = bottom[0]
-    z0 = bottom[2]
-    x1 = bottom[0]
-    z1 = bottom[2]
+    x = left[0]
+    y0 = left[1]
+    z0 = left[2]
+    y1 = left[1]
+    z1 = left[2]
 
     # print "\n"
-    # print "y: ", y
-    # print "x0: ", x0
+    # print "x: ", x
+    # print "y0: ", y0
     # print "z0: ", z0
-    # print "x1: ", x1
+    # print "y1: ", y1
     # print "z1: ", z1
 
-    dxdy0 = (top[0] - bottom[0]) / (top[1] - bottom[1] + .00000000000001)
-    dzdy0 = (top[2] - bottom[2]) / (top[1] - bottom[1] + .00000000000001)
-    dxdy1 = (middle[0] - bottom[0]) / (middle[1] - bottom[1] + .00000000000001)
-    dzdy1 = (middle[2] - bottom[2]) / (middle[1] - bottom[1] + .00000000000001)
-    dxdy2 = (top[0] - middle[0]) / (top[1] - middle[1] + .00000000000001)
-    dzdy2 = (top[2] - middle[2]) / (top[1] - middle[1] + .00000000000001)
+    dydx0 = (right[1] - left[1]) / (right[0] - left[0] + .00000000000001)
+    dzdx0 = (right[2] - left[2]) / (right[0] - left[0] + .00000000000001)
+    dydx1 = (middle[1] - left[1]) / (middle[0] - left[0] + .00000000000001)
+    dzdx1 = (middle[2] - left[2]) / (middle[0] - left[0] + .00000000000001)
+    dydx2 = (right[1] - middle[1]) / (right[0] - middle[0] + .00000000000001)
+    dzdx2 = (right[2] - middle[2]) / (right[0] - middle[0] + .00000000000001)
 
-    # print "btx: ", dxdy0
-    # print "bmx: ", dxdy1
-    # print "mtx: ", dxdy2
+    # print "lrx: ", dydx0
+    # print "lmx: ", dydx1
+    # print "mrx: ", dydx2
 
-    color = [random.randint(0,255), random.randint(0,255), random.randint(0,255)]
+    # color = [random.randint(0,255), random.randint(0,255), random.randint(0,255)]
+    color = [200, 0, 240]
 
-    while(y < middle[1] - 1 and dxdy1 < 2000):
-        y += 1
-        x0 += dxdy0
-        z0 += dzdy0
-        x1 += dxdy1
-        z1 += dzdy1
-        draw_line(screen, [x0, y, z0], [x1, y, z1], color)
-
-    x1 = middle[0]
-    z1 = middle[2]
-
-    while(y < top[1] - 1 and dxdy2 < 2000):
-        y += 1
-        x0 += dxdy0
-        z0 += dzdy0
-        x1 += dxdy2
-        z1 += dzdy2
-        draw_line(screen, [x0, y, z0], [x1, y, z1], color)
+    while(x < middle[0] and abs(dydx1) < 2000): #issues with infinitely large slopes
+        draw_line(screen, [x, y0, z0], [x, y1, z1], color)
+        x += 1
+        y0 += dydx0
+        z0 += dzdx0
+        y1 += dydx1
+        z1 += dzdx1
 
         # print "\n"
-        # print "y: ", y
-        # print "x0: ", x0
+        # print "x: ", x
+        # print "y0: ", y0
         # print "z0: ", z0
-        # print "x1: ", x1
+        # print "y1: ", y1
+        # print "z1: ", z1
+
+    y1 = middle[1]
+    z1 = middle[2]
+
+    while(x < right[0] and abs(dydx2) < 2000):
+        draw_line(screen, [x, y0, z0], [x, y1, z1], color)
+        x += 1
+        y0 += dydx0
+        z0 += dzdx0
+        y1 += dydx2
+        z1 += dzdx2
+
+        # print "\n"
+        # print "x: ", x
+        # print "y0: ", y0
+        # print "z0: ", z0
+        # print "y1: ", y1
         # print "z1: ", z1
 
 
