@@ -134,6 +134,7 @@ def parse(commands, knobs = 0):
     color = [255, 255, 255]
     screen = new_screen()
     stack = [identity_matrix()]
+    zbuf = new_zbuf()
 
     for command in commands:
 
@@ -187,9 +188,9 @@ def parse(commands, knobs = 0):
                 add_sphere(temp, p[0], p[1], p[2], p[3], p[4], .1, .1)
         elif(cmd == 'torus'):
             if(len(p) == 6): #and here, except with 5 params
-                add_torus(temp, p[0], p[1], p[2], p[3], p[4], 'z', .1, .1)
+                add_torus(temp, p[0], p[1], p[2], p[3], p[4], 'z', .05, .1)
             elif(len(p) == 7): #and finally here
-                add_torus(temp, p[0], p[1], p[2], p[3], p[4], p[5], .1, .1)
+                add_torus(temp, p[0], p[1], p[2], p[3], p[4], p[5], .05, .1)
 
         #DISPLAYING AND WHATNOT
         elif(cmd == 'display'):
@@ -209,10 +210,10 @@ def parse(commands, knobs = 0):
 
         if(cmd in ['line', 'circle', 'hermite', 'bezier']):
             temp = matrix_mult(stack[-1], temp)
-            draw_lines(temp, screen, color)
+            draw_lines(temp, screen, color, zbuf)
         elif(cmd in ['box', 'sphere', 'torus']):
             temp = matrix_mult(stack[-1], temp)
-            draw_faces(temp, screen, color)
+            draw_faces(temp, screen, color, zbuf)
 
     #end for-loop
 

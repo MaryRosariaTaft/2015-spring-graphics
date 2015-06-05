@@ -351,30 +351,27 @@ def add_torus(matrix, cx, cy, cz, r_t, r_c, axis_of_rotation, step_t, step_c):
 #DRAWING [that which has been added]
             
 #go through matrix 2 entries at a time and call draw_line on each pair of points
-def draw_lines(matrix, screen, color):
+def draw_lines(matrix, screen, color, zbuf):
     for index in xrange(0, len(matrix), 2):
         p0 = matrix[index]
         p1 = matrix[index+1]
-        draw_line(screen, p0, p1, color)
+        draw_line(screen, p0, p1, color, zbuf)
     return
 
 #go through matrix 3 entries at a time and call draw_line between each set of points; backface culling implemented, scanline conversion in the works
-def draw_faces(matrix, screen, color):
+def draw_faces(matrix, screen, color, zbuf):
     for index in xrange(0, len(matrix), 3):
         p0 = matrix[index]
         p1 = matrix[index+1]
         p2 = matrix[index+2]
-        if(is_frontface(p0, p1, p2)):
-            scanline_convert(screen, p0, p1, p2, color)
-            draw_line(screen, p0, p1, color)
-            draw_line(screen, p1, p2, color)
-            draw_line(screen, p2, p0, color)
-        # draw_line(screen, p0, p1, color)
-        # draw_line(screen, p1, p2, color)
-        # draw_line(screen, p2, p0, color)
+        if(not is_backface(p0, p1, p2)):
+            scanline_convert(screen, p0, p1, p2, color, zbuf)
+        # draw_line(screen, p0, p1, color, zbuf)
+        # draw_line(screen, p1, p2, color, zbuf)
+        # draw_line(screen, p2, p0, color, zbuf)
     return
 
-def is_frontface(p0, p1, p2):
+def is_backface(p0, p1, p2):
     #two vectors which define plane
     a = [p1[0]-p0[0], p1[1]-p0[1], p1[2]-p0[2]]
     b = [p2[0]-p0[0], p2[1]-p0[1], p2[2]-p0[2]]
@@ -388,13 +385,13 @@ def is_frontface(p0, p1, p2):
     dp = n[0]*v[0] + n[1]*v[1] + n[2]*v[2]
     #angle between surface normal and view vector
     theta = math.acos(dp/mn/mv)
-    #obtuse angle --> is a frontface
+    #obtuse angle --> is a ??
     if(theta > math.pi/2 and theta < 3*math.pi/2):
         return 1
-    #acute angle --> is not a frontface
+    #acute angle --> is ??
     return 0
 
-def scanline_convert(screen, p0, p1, p2, color):
+def scanline_convert(screen, p0, p1, p2, color, zbuf):
 
     pts = [p0, p1, p2]
     #left
@@ -439,11 +436,11 @@ def scanline_convert(screen, p0, p1, p2, color):
     # print "lmx: ", dydx1
     # print "mrx: ", dydx2
 
-    # color = [random.randint(0,255), random.randint(0,255), random.randint(0,255)]
-    color = [200, 0, 240]
+    color = [random.randint(0,255), random.randint(0,255), random.randint(0,255)]
+    # color = [200, 0, 240]
 
     while(x < middle[0] and abs(dydx1) < 2000): #issues with infinitely large slopes
-        draw_line(screen, [x, y0, z0], [x, y1, z1], color)
+        draw_line(screen, [x, y0, z0], [x, y1, z1], color, zbuf)
         x += 1
         y0 += dydx0
         z0 += dzdx0
@@ -461,7 +458,7 @@ def scanline_convert(screen, p0, p1, p2, color):
     z1 = middle[2]
 
     while(x < right[0] and abs(dydx2) < 2000):
-        draw_line(screen, [x, y0, z0], [x, y1, z1], color)
+        draw_line(screen, [x, y0, z0], [x, y1, z1], color, zbuf)
         x += 1
         y0 += dydx0
         z0 += dzdx0
@@ -477,7 +474,7 @@ def scanline_convert(screen, p0, p1, p2, color):
 
 
 #Bresenham's line algorithm
-def draw_line(screen, p0, p1, color):
+def draw_line(screen, p0, p1, color, zbuf):
     # print "p0: ", p0
     # print "p1: ", p1
     # time.sleep(1)
@@ -488,64 +485,85 @@ def draw_line(screen, p0, p1, color):
         x1 = p1[0]
         y0 = p0[1]
         y1 = p1[1]
+        z0 = p0[2]
+        z1 = p1[2]
     else:
         x0 = p1[0]
         x1 = p0[0]
         y0 = p1[1]
         y1 = p0[1]
+        z0 = p1[2]
+        z1 = p0[2]
 
     #assign slope (to be used in forthcoming conditionals)
     dx = x1 - x0
     dy = y1 - y0
+    dz = z1 - z0
     if(dx):
         m = float(dy) / float(dx)
     else:
         m = 2 #lazy way to push vertical lines into the octant II condition
+    if(dx):
+        dzdx = dz/dx
+    if(dy):
+        dzdy = dz/dy
 
     #algorithm
     xi = x0
     yi = y0
+    zi = z0
     A = 2*dy
     B = -2*dx
-    if(m >= 0 and m < 1): #octants I, V
+    if(not dx and not dy): #FIX
+        # pass
+        while(zi <= z1):
+            plot(screen, color, x0, y0, zi, zbuf)
+            zi += 1
+    elif(m >= 0 and m < 1): #octants I, V
         d = A + B/2
         while(xi <= x1):
-            plot(screen, color, xi, yi)
+            plot(screen, color, xi, yi, zi, zbuf)
             if(d > 0):
                 yi += 1
                 d += B
             xi += 1
+            zi += dzdx
             d += A
     elif(m >= 1): #octants II, VI
         d = A/2 + B
         while(yi <= y1):
-            plot(screen, color, xi, yi)
+            plot(screen, color, xi, yi, zi, zbuf)
             if(d < 0):
                 xi += 1
                 d += A
             yi += 1
+            zi += dzdy
             d += B
     elif(m <= -1): #octants III, VII
         d = -A/2 + B
         while(yi <= y1):
-            plot(screen, color, xi, yi)
+            plot(screen, color, xi, yi, zi, zbuf)
             if(d > 0):
                 xi -= 1
                 d -= A
             yi += 1
+            zi += dzdy
             d += B
-    elif(m >= -1 and m < 0): #octants IV, VIII
+    elif(m > -1 and m < 0): #octants IV, VIII
         d = A - B/2
         while(xi >= x1):
-            plot(screen, color, xi, yi)
+            plot(screen, color, xi, yi, zi, zbuf)
             if(d < 0):
                 yi += 1
                 d += B
             xi -= 1
+            zi -= dzdx
             d -= A
     else:
         print "error"
 
     return
 
-# draw_line(new_screen(), [0,0,0], [0,100,0], [0,0,255])
+# draw_line(new_screen(), [0,0,0], [100,100,100], [255,255,255])
+# draw_line(new_screen(), [0,0,0], [100,100,100], [0,0,255])
+# display(new_screen(), "pics/test.ppm")
