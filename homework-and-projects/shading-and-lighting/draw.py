@@ -365,10 +365,12 @@ def draw_faces(matrix, screen, color, zbuf):
         p1 = matrix[index+1]
         p2 = matrix[index+2]
         if(not is_backface(p0, p1, p2)):
+            color = [random.randint(0,255), random.randint(0,255), random.randint(0,255)]
+            # color = [255, 0, 0]
             scanline_convert(screen, p0, p1, p2, color, zbuf)
-        # draw_line(screen, p0, p1, color, zbuf)
-        # draw_line(screen, p1, p2, color, zbuf)
-        # draw_line(screen, p2, p0, color, zbuf)
+            # draw_line(screen, p0, p1, color, zbuf)
+            # draw_line(screen, p1, p2, color, zbuf)
+            # draw_line(screen, p2, p0, color, zbuf)
     return
 
 def is_backface(p0, p1, p2):
@@ -435,9 +437,6 @@ def scanline_convert(screen, p0, p1, p2, color, zbuf):
     # print "lrx: ", dydx0
     # print "lmx: ", dydx1
     # print "mrx: ", dydx2
-
-    color = [random.randint(0,255), random.randint(0,255), random.randint(0,255)]
-    # color = [200, 0, 240]
 
     while(x < middle[0] and abs(dydx1) < 2000): #issues with infinitely large slopes
         draw_line(screen, [x, y0, z0], [x, y1, z1], color, zbuf)
