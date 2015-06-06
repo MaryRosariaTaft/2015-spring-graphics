@@ -358,7 +358,7 @@ def draw_lines(matrix, screen, color, zbuf):
         draw_line(screen, p0, p1, color, zbuf)
     return
 
-#go through matrix 3 entries at a time and call draw_line between each set of points; backface culling implemented, scanline conversion in the works
+#go through matrix 3 entries at a time and call draw_line between each set of points; backface culling, scanline conversion, and z-buffering implemented
 def draw_faces(matrix, screen, color, zbuf):
     for index in xrange(0, len(matrix), 3):
         p0 = matrix[index]
@@ -366,7 +366,7 @@ def draw_faces(matrix, screen, color, zbuf):
         p2 = matrix[index+2]
         if(not is_backface(p0, p1, p2)):
             color = [random.randint(0,255), random.randint(0,255), random.randint(0,255)]
-            # color = [255, 0, 0]
+            #FLAT SHADING: edit the given color *here* based on angle of the face with respect to the [currently hard-coded] light source(s) then pass it through scanline function
             scanline_convert(screen, p0, p1, p2, color, zbuf)
             # draw_line(screen, p0, p1, color, zbuf)
             # draw_line(screen, p1, p2, color, zbuf)
