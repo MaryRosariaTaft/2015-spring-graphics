@@ -366,7 +366,13 @@ def draw_faces(matrix, screen, color, zbuf):
         p2 = matrix[index+2]
         if(not is_backface(p0, p1, p2)):
             color = [random.randint(0,255), random.randint(0,255), random.randint(0,255)]
-            #FLAT SHADING: edit the given color *here* based on angle of the face with respect to the [currently hard-coded] light source(s) then pass it through scanline function
+            #SHADING: don't know what to do about the constants, but set 'color' to shade (either here or in scanline_convert()...) based on angle of the face with respect to the [currently hard-coded] light source(s) (pass it through scanline function if calculated here)
+            """
+            I = I_ambient + I_diffuse + I_specular
+            I_ambient = (level of ambient light 0 - 255) * (constant of ambient reflection)
+            I_diffuse = (level of point-source light 0 - 255) * (constant of diffuse reflection) * (cosine of angle between surface normal and angle of light == cross product of aforementioned vectors)
+            I_specular = (level of point-source light, same as above) * (constant of specular reflection) * [ (2N(N dot L) - L) dot V]^n where n is some somewhat-arbitrary number
+            """
             scanline_convert(screen, p0, p1, p2, color, zbuf)
             # draw_line(screen, p0, p1, color, zbuf)
             # draw_line(screen, p1, p2, color, zbuf)
