@@ -394,30 +394,40 @@ def draw_faces(matrix, screen, color, zbuf):
     return
 
 def is_backface(p0, p1, p2):
-    #two vectors which define plane
-    a = [p1[0]-p0[0], p1[1]-p0[1], p1[2]-p0[2]]
-    b = [p2[0]-p0[0], p2[1]-p0[1], p2[2]-p0[2]]
-    #surface normal and magnitude
-    n = [a[1]*b[2]-a[2]*b[1], a[2]*b[0]-a[0]*b[2], a[0]*b[1]-a[1]*b[0]]
-    mn = vector_magnitude(n) + .00000000000000001 #avoiding division by 0
-    #view vector and magnitude
-    v = [0, 0, -1]
-    mv = vector_magnitude(v) + .00000000000000001 #avoiding division by 0
-    #dot product of surface normal and view vector
-    dp = n[0]*v[0] + n[1]*v[1] + n[2]*v[2]
+    #surface normal
+    n = surface_normal(p0, p1, p2)
+    #view vector
+    v = [0, 0, -1] #hard-coded; not to be calculated
     #angle between surface normal and view vector
-    theta = math.acos(dp/mn/mv)
+    theta = angle_between(n, v)
     #obtuse angle --> is a backface
     if(theta > math.pi/2 and theta < 3*math.pi/2):
         return 1
     #acute angle --> is a frontface
     return 0
 
+def surface_normal(p0, p1, p2):
+    #a and b: two vectors which define plane of given pts.
+    a = [p1[0]-p0[0], p1[1]-p0[1], p1[2]-p0[2]]
+    b = [p2[0]-p0[0], p2[1]-p0[1], p2[2]-p0[2]]
+    return [a[1]*b[2]-a[2]*b[1], a[2]*b[0]-a[0]*b[2], a[0]*b[1]-a[1]*b[0]]
+
 def vector_magnitude(v):
     return math.sqrt(v[0]*v[0] + v[1]*v[1] + v[2]*v[2])
 
-def scanline_convert(screen, p0, p1, p2, color, zbuf):
+def dot_product(v1, v2):
+    return v1[0]*v2[0] + v1[1]*v2[1] + v1[2]*v2[2]
 
+def cross_product(v1, v2):
+    pass
+
+def angle_between(v1, v2):
+    m1 = vector_magnitude(v1) + .0000000000000000001
+    m2 = vector_magnitude(v2) + .0000000000000000001
+    dp = dot_product(v1, v2)
+    return math.acos(dp/m1/m2)
+
+def scanline_convert(screen, p0, p1, p2, color, zbuf):
     pts = [p0, p1, p2]
     #left
     if(p0[0] <= p1[0] and p0[0] <= p2[0]):
