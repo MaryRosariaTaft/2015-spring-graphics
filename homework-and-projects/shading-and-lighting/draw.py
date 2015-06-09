@@ -365,7 +365,8 @@ def draw_faces(matrix, screen, color, zbuf):
         p1 = matrix[index+1]
         p2 = matrix[index+2]
         if(not is_backface(p0, p1, p2)):
-            color = [random.randint(0,255), random.randint(0,255), random.randint(0,255)]
+            # color = [random.randint(0,255), random.randint(0,255), random.randint(0,255)]
+            
             #SHADING: don't know what to do about the constants, but set 'color' to shade (either here or in scanline_convert()...) based on angle of the face with respect to the [currently hard-coded] light source(s) (pass it through scanline function if calculated here)
             """
             I = I_ambient + I_diffuse + I_specular
@@ -373,6 +374,19 @@ def draw_faces(matrix, screen, color, zbuf):
             I_diffuse = (level of point-source light 0 - 255) * (constant of diffuse reflection) * (cosine of angle between surface normal and angle of light == cross product of aforementioned vectors)
             I_specular = (level of point-source light, same as above) * (constant of specular reflection) * [ (2N(N dot L) - L) dot V]^n where n is some somewhat-arbitrary number
             """
+            #hard-coded values
+            Ia = 180
+            Ip = 220
+            Ka = 0.30
+            Kd = 0.30
+            Ks = 0.40
+            N = surface_normal(p0, p1, p2) #DEFINE
+            L = [0, 0, 0] #SET
+            I_ambient = Ia * Ka
+            I_diffuse = Ip * Kd * cross_product(N,L) #DEFINE
+            I_specular = Ip * Ks * dot_product(2*N*dot_product(N,L)-L, [0, 0, -1]) #DEFINE and raise to power
+            I = I_ambient + I_diffuse + I_specular
+            color = [I, I, I]
             scanline_convert(screen, p0, p1, p2, color, zbuf)
             # draw_line(screen, p0, p1, color, zbuf)
             # draw_line(screen, p1, p2, color, zbuf)
