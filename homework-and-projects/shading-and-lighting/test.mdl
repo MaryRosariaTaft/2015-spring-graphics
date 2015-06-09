@@ -9,10 +9,10 @@
 //box 0 0 0 130 130 130
 //display
 
-frames 10
-basename discoball
-rotate x 180 r
-vary r 0 10 0 1
+//frames 10
+//basename discoball
+//rotate x 180 r
+//vary r 0 10 0 1
 
 rotate x -70
 rotate y 30

@@ -365,7 +365,7 @@ def draw_faces(matrix, screen, color, zbuf):
         p1 = matrix[index+1]
         p2 = matrix[index+2]
         if(not is_backface(p0, p1, p2)):
-            # color = [random.randint(0,255), random.randint(0,255), random.randint(0,255)]
+            color = [random.randint(0,255), random.randint(0,255), random.randint(0,255)]
             
             #SHADING: don't know what to do about the constants, but set 'color' to shade (either here or in scanline_convert()...) based on angle of the face with respect to the [currently hard-coded] light source(s) (pass it through scanline function if calculated here)
             """
@@ -375,18 +375,18 @@ def draw_faces(matrix, screen, color, zbuf):
             I_specular = (level of point-source light, same as above) * (constant of specular reflection) * [ (2N(N dot L) - L) dot V]^n where n is some somewhat-arbitrary number
             """
             #hard-coded values
-            Ia = 180
-            Ip = 220
-            Ka = 0.30
-            Kd = 0.30
-            Ks = 0.40
-            N = surface_normal(p0, p1, p2) #DEFINE
-            L = [0, 0, 0] #SET
-            I_ambient = Ia * Ka
-            I_diffuse = Ip * Kd * cross_product(N,L) #DEFINE
-            I_specular = Ip * Ks * dot_product(2*N*dot_product(N,L)-L, [0, 0, -1]) #DEFINE and raise to power
-            I = I_ambient + I_diffuse + I_specular
-            color = [I, I, I]
+            # Ia = 180
+            # Ip = 220
+            # Ka = 0.30
+            # Kd = 0.30
+            # Ks = 0.40
+            # N = surface_normal(p0, p1, p2) #DEFINE
+            # L = [0, 0, 0] #SET
+            # I_ambient = Ia * Ka
+            # I_diffuse = Ip * Kd * cross_product(N,L) #DEFINE
+            # I_specular = Ip * Ks * dot_product(2*N*dot_product(N,L)-L, [0, 0, -1]) #DEFINE and raise to power
+            # I = I_ambient + I_diffuse + I_specular
+            # color = [I, I, I]
             scanline_convert(screen, p0, p1, p2, color, zbuf)
             # draw_line(screen, p0, p1, color, zbuf)
             # draw_line(screen, p1, p2, color, zbuf)
@@ -399,19 +399,22 @@ def is_backface(p0, p1, p2):
     b = [p2[0]-p0[0], p2[1]-p0[1], p2[2]-p0[2]]
     #surface normal and magnitude
     n = [a[1]*b[2]-a[2]*b[1], a[2]*b[0]-a[0]*b[2], a[0]*b[1]-a[1]*b[0]]
-    mn = math.sqrt(n[0]*n[0] + n[1]*n[1] + n[2]*n[2])+.00000000000000001 #avoiding division by 0
+    mn = vector_magnitude(n) + .00000000000000001 #avoiding division by 0
     #view vector and magnitude
     v = [0, 0, -1]
-    mv = math.sqrt(v[0]*v[0] + v[1]*v[1] + v[2]*v[2])+.00000000000000001
+    mv = vector_magnitude(v) + .00000000000000001 #avoiding division by 0
     #dot product of surface normal and view vector
     dp = n[0]*v[0] + n[1]*v[1] + n[2]*v[2]
     #angle between surface normal and view vector
     theta = math.acos(dp/mn/mv)
-    #obtuse angle --> is a ??
+    #obtuse angle --> is a backface
     if(theta > math.pi/2 and theta < 3*math.pi/2):
         return 1
-    #acute angle --> is ??
+    #acute angle --> is a frontface
     return 0
+
+def vector_magnitude(v):
+    return math.sqrt(v[0]*v[0] + v[1]*v[1] + v[2]*v[2])
 
 def scanline_convert(screen, p0, p1, p2, color, zbuf):
 
