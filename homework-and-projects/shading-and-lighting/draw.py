@@ -370,11 +370,11 @@ def draw_faces(matrix, screen, color, zbuf):
             #SHADING: don't know what to do about the constants, but set 'color' to shade (either here or in scanline_convert()...) based on angle of the face with respect to the [currently hard-coded] light source(s) (pass it through scanline function if calculated here)
 
             #hard-coded values
-            Ia = 0.3
-            Ip = 0.7
+            Ia = 255
+            Ip = 255
             Ka = 0.4
-            Kd = 0.4
-            Ks = 0.2
+            Kd = 0.6
+            Ks = 0.0
             N = surface_normal(p0, p1, p2)
             mn = vector_magnitude(N) + .00000000001
             N = [N[0]/mn, N[1]/mn, N[2]/mn]
@@ -382,21 +382,25 @@ def draw_faces(matrix, screen, color, zbuf):
             ml = vector_magnitude(L) + .00000000001
             L = [L[0]/mn, L[1]/ml, L[2]/ml]
             V = [0, 0, -1]
-            mv = vector_magnitude(V) + .00000000001
-            V = [V[0]/mv, V[1]/mv, V[2]/mv]
+            #mv = vector_magnitude(V) + .00000000001
+            #V = [V[0]/mv, V[1]/mv, V[2]/mv]
             I_ambient = Ia * Ka
-            I_diffuse = Ip * Kd * dot_product(N,L)
-            coeff = 2*dot_product(N,L)
+            # print "iambient: ", I_ambient
+            I_diffuse = Ip * Kd * abs(dot_product(N,L))
+            # print "idiffuse: ", I_diffuse
+            coeff = 2*abs(dot_product(N,L))
             temp = [coeff*N[0], coeff*N[1], coeff*N[2]]
-            I_specular = Ip * Ks * dot_product([temp[0]-L[0], temp[1]-L[1], temp[2]-L[2]], V)
+            I_specular = Ip * Ks * abs(dot_product([temp[0]-L[0], temp[1]-L[1], temp[2]-L[2]], V))
+            # print "ispecular: ", I_specular
             I = I_ambient + I_diffuse + I_specular
+            # print "total: ", I
             # print I
-            color = [abs(int(I*color[0])),abs(int(I*color[1])),abs(int(I*color[2]))]
+            color = [int(I),int(I),int(I)]
             # print color
             scanline_convert(screen, p0, p1, p2, color, zbuf)
-            # draw_line(screen, p0, p1, color, zbuf)
-            # draw_line(screen, p1, p2, color, zbuf)
-            # draw_line(screen, p2, p0, color, zbuf)
+            draw_line(screen, p0, p1, color, zbuf)
+            draw_line(screen, p1, p2, color, zbuf)
+            draw_line(screen, p2, p0, color, zbuf)
     return
 
 def is_backface(p0, p1, p2):
@@ -552,11 +556,12 @@ def draw_line(screen, p0, p1, color, zbuf):
     zi = z0
     A = 2*dy
     B = -2*dx
-    if(not dx and not dy): #FIX
+    if(not dx and not dy):
+        plot(screen, color, x0, y0, zi, zbuf)
         # pass
-        while(zi <= z1):
-            plot(screen, color, x0, y0, zi, zbuf)
-            zi += 1
+        # while(zi <= z1):
+        #     plot(screen, color, x0, y0, zi, zbuf)
+        #     zi += 1
     elif(m >= 0 and m < 1): #octants I, V
         d = A + B/2
         while(xi <= x1):
