@@ -365,28 +365,34 @@ def draw_faces(matrix, screen, color, zbuf):
         p1 = matrix[index+1]
         p2 = matrix[index+2]
         if(not is_backface(p0, p1, p2)):
-            color = [random.randint(0,255), random.randint(0,255), random.randint(0,255)]
-            
+            # color = [random.randint(0,255), random.randint(0,255), random.randint(0,255)]
+            color = [255, 255, 255]
             #SHADING: don't know what to do about the constants, but set 'color' to shade (either here or in scanline_convert()...) based on angle of the face with respect to the [currently hard-coded] light source(s) (pass it through scanline function if calculated here)
-            """
-            I = I_ambient + I_diffuse + I_specular
-            I_ambient = (level of ambient light 0 - 255) * (constant of ambient reflection)
-            I_diffuse = (level of point-source light 0 - 255) * (constant of diffuse reflection) * (cosine of angle between surface normal and angle of light == cross product of aforementioned vectors)
-            I_specular = (level of point-source light, same as above) * (constant of specular reflection) * [ (2N(N dot L) - L) dot V]^n where n is some somewhat-arbitrary number
-            """
+
             #hard-coded values
-            # Ia = 180
-            # Ip = 220
-            # Ka = 0.30
-            # Kd = 0.30
-            # Ks = 0.40
-            # N = surface_normal(p0, p1, p2) #DEFINE
-            # L = [0, 0, 0] #SET
-            # I_ambient = Ia * Ka
-            # I_diffuse = Ip * Kd * cross_product(N,L) #DEFINE
-            # I_specular = Ip * Ks * dot_product(2*N*dot_product(N,L)-L, [0, 0, -1]) #DEFINE and raise to power
-            # I = I_ambient + I_diffuse + I_specular
-            # color = [I, I, I]
+            Ia = 0.3
+            Ip = 0.7
+            Ka = 0.4
+            Kd = 0.4
+            Ks = 0.2
+            N = surface_normal(p0, p1, p2)
+            mn = vector_magnitude(N) + .00000000001
+            N = [N[0]/mn, N[1]/mn, N[2]/mn]
+            L = [-10, -7, -4]
+            ml = vector_magnitude(L) + .00000000001
+            L = [L[0]/mn, L[1]/ml, L[2]/ml]
+            V = [0, 0, -1]
+            mv = vector_magnitude(V) + .00000000001
+            V = [V[0]/mv, V[1]/mv, V[2]/mv]
+            I_ambient = Ia * Ka
+            I_diffuse = Ip * Kd * dot_product(N,L)
+            coeff = 2*dot_product(N,L)
+            temp = [coeff*N[0], coeff*N[1], coeff*N[2]]
+            I_specular = Ip * Ks * dot_product([temp[0]-L[0], temp[1]-L[1], temp[2]-L[2]], V)
+            I = I_ambient + I_diffuse + I_specular
+            # print I
+            color = [abs(int(I*color[0])),abs(int(I*color[1])),abs(int(I*color[2]))]
+            # print color
             scanline_convert(screen, p0, p1, p2, color, zbuf)
             # draw_line(screen, p0, p1, color, zbuf)
             # draw_line(screen, p1, p2, color, zbuf)
@@ -394,11 +400,8 @@ def draw_faces(matrix, screen, color, zbuf):
     return
 
 def is_backface(p0, p1, p2):
-    #surface normal
     n = surface_normal(p0, p1, p2)
-    #view vector
-    v = [0, 0, -1] #hard-coded; not to be calculated
-    #angle between surface normal and view vector
+    v = [0, 0, -1] #the view vector
     theta = angle_between(n, v)
     #obtuse angle --> is a backface
     if(theta > math.pi/2 and theta < 3*math.pi/2):
@@ -419,7 +422,10 @@ def dot_product(v1, v2):
     return v1[0]*v2[0] + v1[1]*v2[1] + v1[2]*v2[2]
 
 def cross_product(v1, v2):
-    pass
+    cx = v1[1]*v2[2] - v1[2]*v2[1]
+    cy = v1[2]*v2[0] - v1[0]*v2[2]
+    cz = v1[0]*v2[1] - v1[1]*v2[0]
+    return [cx, cy, cz]
 
 def angle_between(v1, v2):
     m1 = vector_magnitude(v1) + .0000000000000000001

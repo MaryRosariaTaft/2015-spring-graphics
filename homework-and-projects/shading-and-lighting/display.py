@@ -12,7 +12,7 @@ GREEN = 1
 BLUE = 2
 
 #pixels will be represented as 3 element lists
-DEFAULT_COLOR = [255, 255, 255]
+DEFAULT_COLOR = [0, 0, 0]
 
 
 #screen will be a 2D array of pixels
