@@ -185,7 +185,7 @@ def parse(commands, knobs = 0):
             if(len(p) == 5): #currently takes only 4 parameters; unsure how else to handle (or whether indeed handling properly as is) until last element of list p is utilized
                 add_sphere(temp, p[0], p[1], p[2], p[3], 'z', .05, .1)
             elif(len(p) == 6): #same here
-                add_sphere(temp, p[0], p[1], p[2], p[3], p[4], .05, .1)
+                add_sphere(temp, p[0], p[1], p[2], p[3], p[4], .1, .05)
         elif(cmd == 'torus'):
             if(len(p) == 6): #and here, except with 5 params
                 add_torus(temp, p[0], p[1], p[2], p[3], p[4], 'z', .02, .1)
@@ -198,7 +198,7 @@ def parse(commands, knobs = 0):
                 t = str(time.time())
                 display(screen, "pics/"+t+".ppm")
                 time.sleep(.3) #this is a potentially horrible way to do this but...
-                remove("pics/"+t+".ppm")
+                #remove("pics/"+t+".ppm")
         elif(cmd == 'save'):
             if(knobs):
                 save_extension(screen, p[0])

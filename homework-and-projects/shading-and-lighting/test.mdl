@@ -9,16 +9,16 @@
 //box 0 0 0 130 130 130
 //display
 
-frames 10
-basename discoball
-rotate x 180 r
-vary r 0 10 0 1
+//frames 20
+//basename discoball
+//rotate x 360 r
+//vary r 0 20 0 1
 
-rotate x -70
-rotate y 30
-torus 0 0 0 250 30 y
-sphere 0 0 0 100 y
-//box -50 -50 -50 100 100 100
+//rotate y -80
+rotate x -30
+torus 0 0 0 200 60 y
+//sphere 0 0 0 150 x
+box -50 -50 -50 100 100 100
 display
 quit
 

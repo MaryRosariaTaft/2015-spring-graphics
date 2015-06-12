@@ -279,14 +279,14 @@ def add_sphere(matrix, cx, cy, cz, r, axis_of_rotation, step_p, step_c):
         print "add_sphere: invalid axis_of_rotation value"
         return
 
-    p = len(pts) - 1
+    p = len(pts) - 1 
     c = len(pts[0]) - 1
     for i in xrange(p):
         for j in xrange(c):
             add_face1(matrix, pts[i][j], pts[i+1][j], pts[i+1][j+1])
             add_face1(matrix, pts[i+1][j+1], pts[i][j+1], pts[i][j])
-        # add_face1(matrix, pts[i][c], pts[i+1][c], pts[i+1][0])
-        # add_face1(matrix, pts[i+1][0], pts[i][0], pts[i][c])
+    #     add_face1(matrix, pts[i][c], pts[i+1][c], pts[i+1][0])
+    #     add_face1(matrix, pts[i+1][0], pts[i][0], pts[i][c])
     # add_face1(matrix, pts[p][c], pts[0][c], pts[0][0])
     # add_face1(matrix, pts[0][0], pts[p][0], pts[p][c])    
     return
@@ -378,7 +378,7 @@ def draw_faces(matrix, screen, color, zbuf):
             N = surface_normal(p0, p1, p2)
             mn = vector_magnitude(N) + .00000000001
             N = [N[0]/mn, N[1]/mn, N[2]/mn]
-            L = [-10, -7, -4]
+            L = [1, 1, -1]
             ml = vector_magnitude(L) + .00000000001
             L = [L[0]/mn, L[1]/ml, L[2]/ml]
             V = [0, 0, -1]
