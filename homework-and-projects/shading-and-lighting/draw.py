@@ -365,43 +365,51 @@ def draw_faces(matrix, screen, color, zbuf):
         p1 = matrix[index+1]
         p2 = matrix[index+2]
         if(not is_backface(p0, p1, p2)):
-            # color = [random.randint(0,255), random.randint(0,255), random.randint(0,255)]
-            color = [255, 255, 255]
-            #SHADING: don't know what to do about the constants, but set 'color' to shade (either here or in scanline_convert()...) based on angle of the face with respect to the [currently hard-coded] light source(s) (pass it through scanline function if calculated here)
-
-            #hard-coded values
-            Ia = 255
-            Ip = 255
-            Ka = 0.4
-            Kd = 0.6
-            Ks = 0.0
-            N = surface_normal(p0, p1, p2)
-            mn = vector_magnitude(N) + .00000000001
-            N = [N[0]/mn, N[1]/mn, N[2]/mn]
-            L = [1, 1, -1]
-            ml = vector_magnitude(L) + .00000000001
-            L = [L[0]/mn, L[1]/ml, L[2]/ml]
-            V = [0, 0, -1]
-            #mv = vector_magnitude(V) + .00000000001
-            #V = [V[0]/mv, V[1]/mv, V[2]/mv]
-            I_ambient = Ia * Ka
-            # print "iambient: ", I_ambient
-            I_diffuse = Ip * Kd * abs(dot_product(N,L))
-            # print "idiffuse: ", I_diffuse
-            coeff = 2*abs(dot_product(N,L))
-            temp = [coeff*N[0], coeff*N[1], coeff*N[2]]
-            I_specular = Ip * Ks * abs(dot_product([temp[0]-L[0], temp[1]-L[1], temp[2]-L[2]], V))
-            # print "ispecular: ", I_specular
-            I = I_ambient + I_diffuse + I_specular
-            # print "total: ", I
-            # print I
-            color = [int(I),int(I),int(I)]
-            # print color
+            color = set_color(p0, p1, p2)
             scanline_convert(screen, p0, p1, p2, color, zbuf)
             draw_line(screen, p0, p1, color, zbuf)
             draw_line(screen, p1, p2, color, zbuf)
             draw_line(screen, p2, p0, color, zbuf)
     return
+
+def set_color(p0, p1, p2):
+    #SHADING: don't know what to do about the constants, but set 'color' to shade (either here or in scanline_convert()...) based on angle of the face with respect to the [currently hard-coded] light source(s) (pass it through scanline function if calculated here)
+    #hard-coded values
+    Ia = 170
+    Ip = 255
+    Ka = 0.6
+    Kd = 0.3
+    Ks = 0.1
+    N = surface_normal(p0, p1, p2)
+    mn = vector_magnitude(N) + .00000000001
+    N = [N[0]/mn, N[1]/mn, N[2]/mn]
+    L = [6, 0, -1]
+    ml = vector_magnitude(L) + .00000000001
+    L = [L[0]/mn, L[1]/ml, L[2]/ml]
+    V = [0, 0, -1]
+    mv = vector_magnitude(V) + .00000000001
+    V = [V[0]/mv, V[1]/mv, V[2]/mv]
+    I_ambient = Ia * Ka
+    # print "iambient: ", I_ambient
+    I_diffuse = Ip * Kd * abs(dot_product(N,L))
+    # print "idiffuse: ", I_diffuse
+    #SPECULAR STUFF (not really readable in a single line)
+    coeff = 2*abs(dot_product(N,L))
+    temp = [coeff*N[0], coeff*N[1], coeff*N[2]]
+    mt = vector_magnitude(temp) + 0.00000000001
+    temp = [temp[0]/mt, temp[1]/mt, temp[2]/mt]
+    huh = abs(dot_product([temp[0]-L[0], temp[1]-L[1], temp[2]-L[2]], V))
+    I_specular = Ip * Ks * huh
+    # print "ispecular: ", I_specular
+    I = I_ambient + I_diffuse + I_specular
+    # print "total: ", I
+    # print I
+    color = [int(I),int(I),int(I)]
+    # color = [random.randint(0,255), random.randint(0,255), random.randint(0,255)]
+    # color = [255, 255, 255]
+    # color = [0, 0, 0]
+    # print color
+    return color
 
 def is_backface(p0, p1, p2):
     n = surface_normal(p0, p1, p2)
