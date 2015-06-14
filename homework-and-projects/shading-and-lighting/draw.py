@@ -366,12 +366,12 @@ def draw_faces(matrix, screen, color, zbuf):
         p2 = matrix[index+2]
         if(not is_backface(p0, p1, p2)):
             #currently all hard-coded
-            L = [6, 0, -1]
+            L = [0, 0, -1]
             Ia = 255
             Ip = 255
-            Ka = 0.5
-            Kd = 0.1
-            Ks = 0.4
+            Ka = 0.4
+            Kd = 0.3
+            Ks = 0.3
             color = set_color(p0, p1, p2, L, Ia, Ip, Ka, Kd, Ks)
             scanline_convert(screen, p0, p1, p2, color, zbuf)
             draw_line(screen, p0, p1, color, zbuf)
@@ -392,20 +392,22 @@ def set_color(p0, p1, p2, L, Ia, Ip, Ka, Kd, Ks):
 
     I_ambient = Ia * Ka
     # print "I_ambient: ", I_ambient
+
     I_diffuse = Ip * Kd * abs(dot_product(N,L))
     # print "I_diffuse: ", I_diffuse
-    coeff = 2*abs(dot_product(N,L))
-    temp = [coeff*N[0], coeff*N[1], coeff*N[2]]
-    mt = vector_magnitude(temp) + 0.00000000001
-    temp = [temp[0]/mt, temp[1]/mt, temp[2]/mt]
-    huh = abs(dot_product([temp[0]-L[0], temp[1]-L[1], temp[2]-L[2]], V))
-    I_specular = Ip * Ks * huh**3
+
+    R = [L[0]+N[0], L[1]+N[1], L[2]+N[2]]
+    mr = vector_magnitude(R) + .0000000000000001
+    R = [R[0]/mr, R[1]/mr, R[2]/mr]
+    I_specular = Ip * Ks * dot_product(R, V)**100
     # print "I_specular: ", I_specular
+
     I = I_ambient + I_diffuse + I_specular
     # print "I: ", I
     color = [int(I),int(I),int(I)]
-    #color = [int(I),0,0]
+    # color = [int(I),0,0]
     # print color
+
     return color
 
 def is_backface(p0, p1, p2):
