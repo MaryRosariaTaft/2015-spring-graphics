@@ -242,8 +242,8 @@ def add_sphere(matrix, cx, cy, cz, r, axis_of_rotation, step_p, step_c):
             temp = []
             c = 0
             while(c < 1.00000001):
-                x = r*math.sin(math.pi*c) * math.sin(math.pi*p) + cx
-                y = r*math.sin(math.pi*c) * math.cos(math.pi*p) + cy
+                x = r*math.sin(math.pi*c) * math.cos(math.pi*p) + cx
+                y = r*math.sin(math.pi*c) * math.sin(math.pi*p) + cy
                 z = r*math.cos(math.pi*c) + cz
                 add_point(temp, x, y, z)
                 c += step_c
@@ -299,8 +299,8 @@ def add_torus(matrix, cx, cy, cz, r_t, r_c, axis_of_rotation, step_t, step_c):
             temp = []
             c = 0
             while(c < 1.00000001):
-                x = (r_c*math.sin(2*math.pi*c) + r_t) * math.sin(2*math.pi*t) + cx
-                y = (r_c*math.sin(2*math.pi*c) + r_t) * math.cos(2*math.pi*t) + cy
+                x = (r_c*math.sin(2*math.pi*c) + r_t) * math.cos(2*math.pi*t) + cx
+                y = (r_c*math.sin(2*math.pi*c) + r_t) * math.sin(2*math.pi*t) + cy
                 z = r_c*math.cos(2*math.pi*c) + cz
                 add_point(temp, x, y, z)
                 c += step_c
@@ -365,49 +365,46 @@ def draw_faces(matrix, screen, color, zbuf):
         p1 = matrix[index+1]
         p2 = matrix[index+2]
         if(not is_backface(p0, p1, p2)):
-            Ia = 200
+            #currently all hard-coded
+            L = [6, 0, -1]
+            Ia = 255
             Ip = 255
-            Ka = 0.2
-            Kd = 0.5
-            Ks = 0.3
-            color = set_color(p0, p1, p2, Ia, Ip, Ka, Kd, Ks)
+            Ka = 0.5
+            Kd = 0.1
+            Ks = 0.4
+            color = set_color(p0, p1, p2, L, Ia, Ip, Ka, Kd, Ks)
             scanline_convert(screen, p0, p1, p2, color, zbuf)
             draw_line(screen, p0, p1, color, zbuf)
             draw_line(screen, p1, p2, color, zbuf)
             draw_line(screen, p2, p0, color, zbuf)
     return
 
-def set_color(p0, p1, p2, Ia, Ip, Ka, Kd, Ks):
-    #SHADING: don't know what to do about the constants, but set 'color' to shade (either here or in scanline_convert()...) based on angle of the face with respect to the [currently hard-coded] light source(s) (pass it through scanline function if calculated here)
-    #hard-coded values
+def set_color(p0, p1, p2, L, Ia, Ip, Ka, Kd, Ks):
+    #surface normal calculation and normalization
     N = surface_normal(p0, p1, p2)
     mn = vector_magnitude(N) + .00000000001
     N = [N[0]/mn, N[1]/mn, N[2]/mn]
-    L = [6, 0, -1]
+    #light vector normalization
     ml = vector_magnitude(L) + .00000000001
     L = [L[0]/mn, L[1]/ml, L[2]/ml]
+    #view vector; normalization not required
     V = [0, 0, -1]
-    mv = vector_magnitude(V) + .00000000001
-    V = [V[0]/mv, V[1]/mv, V[2]/mv]
+
     I_ambient = Ia * Ka
-    # print "iambient: ", I_ambient
+    # print "I_ambient: ", I_ambient
     I_diffuse = Ip * Kd * abs(dot_product(N,L))
-    # print "idiffuse: ", I_diffuse
-    #SPECULAR STUFF (not really readable in a single line)
+    # print "I_diffuse: ", I_diffuse
     coeff = 2*abs(dot_product(N,L))
     temp = [coeff*N[0], coeff*N[1], coeff*N[2]]
     mt = vector_magnitude(temp) + 0.00000000001
     temp = [temp[0]/mt, temp[1]/mt, temp[2]/mt]
     huh = abs(dot_product([temp[0]-L[0], temp[1]-L[1], temp[2]-L[2]], V))
-    I_specular = Ip * Ks * huh**2
-    # print "ispecular: ", I_specular
+    I_specular = Ip * Ks * huh**3
+    # print "I_specular: ", I_specular
     I = I_ambient + I_diffuse + I_specular
-    # print "total: ", I
-    # print I
+    # print "I: ", I
     color = [int(I),int(I),int(I)]
-    # color = [random.randint(0,255), random.randint(0,255), random.randint(0,255)]
-    # color = [255, 255, 255]
-    # color = [0, 0, 0]
+    #color = [int(I),0,0]
     # print color
     return color
 
