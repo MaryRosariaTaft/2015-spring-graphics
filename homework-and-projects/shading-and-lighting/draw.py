@@ -365,21 +365,21 @@ def draw_faces(matrix, screen, color, zbuf):
         p1 = matrix[index+1]
         p2 = matrix[index+2]
         if(not is_backface(p0, p1, p2)):
-            color = set_color(p0, p1, p2)
+            Ia = 200
+            Ip = 255
+            Ka = 0.2
+            Kd = 0.5
+            Ks = 0.3
+            color = set_color(p0, p1, p2, Ia, Ip, Ka, Kd, Ks)
             scanline_convert(screen, p0, p1, p2, color, zbuf)
             draw_line(screen, p0, p1, color, zbuf)
             draw_line(screen, p1, p2, color, zbuf)
             draw_line(screen, p2, p0, color, zbuf)
     return
 
-def set_color(p0, p1, p2):
+def set_color(p0, p1, p2, Ia, Ip, Ka, Kd, Ks):
     #SHADING: don't know what to do about the constants, but set 'color' to shade (either here or in scanline_convert()...) based on angle of the face with respect to the [currently hard-coded] light source(s) (pass it through scanline function if calculated here)
     #hard-coded values
-    Ia = 170
-    Ip = 255
-    Ka = 0.6
-    Kd = 0.3
-    Ks = 0.1
     N = surface_normal(p0, p1, p2)
     mn = vector_magnitude(N) + .00000000001
     N = [N[0]/mn, N[1]/mn, N[2]/mn]
@@ -399,7 +399,7 @@ def set_color(p0, p1, p2):
     mt = vector_magnitude(temp) + 0.00000000001
     temp = [temp[0]/mt, temp[1]/mt, temp[2]/mt]
     huh = abs(dot_product([temp[0]-L[0], temp[1]-L[1], temp[2]-L[2]], V))
-    I_specular = Ip * Ks * huh
+    I_specular = Ip * Ks * huh**2
     # print "ispecular: ", I_specular
     I = I_ambient + I_diffuse + I_specular
     # print "total: ", I
