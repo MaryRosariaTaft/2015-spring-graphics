@@ -358,21 +358,21 @@ def draw_lines(matrix, screen, color, zbuf):
         draw_line(screen, p0, p1, color, zbuf)
     return
 
-#go through matrix 3 entries at a time and call draw_line between each set of points; backface culling, scanline conversion, and z-buffering implemented
+#go through matrix 3 entries at a time and call draw_line between each set of points; backface culling and shading (using scanline conversion in conjunction with z-buffering) implemented (although not ideally)
 def draw_faces(matrix, screen, color, zbuf):
     for index in xrange(0, len(matrix), 3):
         p0 = matrix[index]
         p1 = matrix[index+1]
         p2 = matrix[index+2]
         if(not is_backface(p0, p1, p2)):
-            #currently all hard-coded
-            L = [0, 0, -1]
-            rIa = 200
-            rIp = 255
-            rKa = 0.6
-            rKd = 0.4
-            rKs = 0.0
-            rshine = 80
+            #PRESENTLY HARD-CODED VALUES (can/should be made variable, eventually, maybe)
+            L = [0, 0, -1] #light direction
+            rIa = 200 #ambient intensity
+            rIp = 255 #point-source intensity
+            rKa = 0.6 #constant of ambient reflection
+            rKd = 0.4 #constant of diffuse reflection
+            rKs = 0.0 #constant of specular reflection
+            rshine = 80 #shininess (exponent on specular-reflection calculation)
             r = [rIa, rIp, rKa, rKd, rKs, rshine]
             gIa = 180
             gIp = 190
@@ -388,83 +388,13 @@ def draw_faces(matrix, screen, color, zbuf):
             bKs = 0.3
             bshine = 70
             b = [bIa, bIp, bKa, bKd, bKs, bshine]
+            #note: white light with grayscale reflections: r == g == b
             color = set_color(p0, p1, p2, L, r, g, b)
             scanline_convert(screen, p0, p1, p2, color, zbuf)
             draw_line(screen, p0, p1, color, zbuf)
             draw_line(screen, p1, p2, color, zbuf)
             draw_line(screen, p2, p0, color, zbuf)
     return
-
-def set_color(p0, p1, p2, L, r, g, b):
-    #surface normal calculation and normalization
-    N = surface_normal(p0, p1, p2)
-    mn = vector_magnitude(N) + .00000000001
-    N = [N[0]/mn, N[1]/mn, N[2]/mn]
-    #light vector normalization
-    ml = vector_magnitude(L) + .00000000001
-    L = [L[0]/mn, L[1]/ml, L[2]/ml]
-    #view vector; normalization not required
-    V = [0, 0, -1]
-
-    Ia = r[0]
-    Ip = r[1]
-    Ka = r[2]
-    Kd = r[3]
-    Ks = r[4]
-    shine = r[5]
-    I_ambient = Ia * Ka
-    # print "I_ambient: ", I_ambient
-    I_diffuse = Ip * Kd * abs(dot_product(N,L))
-    # print "I_diffuse: ", I_diffuse
-    R = [L[0]+N[0], L[1]+N[1], L[2]+N[2]]
-    mr = vector_magnitude(R) + .0000000000000001
-    R = [R[0]/mr, R[1]/mr, R[2]/mr]
-    I_specular = Ip * Ks * dot_product(R, V)**shine
-    # print "I_specular: ", I_specular
-    rI = I_ambient + I_diffuse + I_specular
-    # print "rI: ", rI
-
-    Ia = g[0]
-    Ip = g[1]
-    Ka = g[2]
-    Kd = g[3]
-    Ks = g[4]
-    shine = g[5]
-    I_ambient = Ia * Ka
-    # print "I_ambient: ", I_ambient
-    I_diffuse = Ip * Kd * abs(dot_product(N,L))
-    # print "I_diffuse: ", I_diffuse
-    R = [L[0]+N[0], L[1]+N[1], L[2]+N[2]]
-    mr = vector_magnitude(R) + .0000000000000001
-    R = [R[0]/mr, R[1]/mr, R[2]/mr]
-    I_specular = Ip * Ks * dot_product(R, V)**shine
-    # print "I_specular: ", I_specular
-    gI = I_ambient + I_diffuse + I_specular
-    # print "rI: ", rI
-
-    Ia = b[0]
-    Ip = b[1]
-    Ka = b[2]
-    Kd = b[3]
-    Ks = b[4]
-    shine = b[5]
-    I_ambient = Ia * Ka
-    # print "I_ambient: ", I_ambient
-    I_diffuse = Ip * Kd * abs(dot_product(N,L))
-    # print "I_diffuse: ", I_diffuse
-    R = [L[0]+N[0], L[1]+N[1], L[2]+N[2]]
-    mr = vector_magnitude(R) + .0000000000000001
-    R = [R[0]/mr, R[1]/mr, R[2]/mr]
-    I_specular = Ip * Ks * dot_product(R, V)**shine
-    # print "I_specular: ", I_specular
-    bI = I_ambient + I_diffuse + I_specular
-    # print "rI: ", rI
-
-    color = [int(rI),int(gI),int(bI)]
-    # color = [int(I),0,0]
-    # print color
-
-    return color
 
 def is_backface(p0, p1, p2):
     n = surface_normal(p0, p1, p2)
@@ -576,6 +506,78 @@ def scanline_convert(screen, p0, p1, p2, color, zbuf):
         # print "z0: ", z0
         # print "y1: ", y1
         # print "z1: ", z1
+
+
+def set_color(p0, p1, p2, L, r, g, b):
+    #surface normal calculation and normalization
+    N = surface_normal(p0, p1, p2)
+    mn = vector_magnitude(N) + .00000000001
+    N = [N[0]/mn, N[1]/mn, N[2]/mn]
+    #light vector normalization
+    ml = vector_magnitude(L) + .00000000001
+    L = [L[0]/mn, L[1]/ml, L[2]/ml]
+    #view vector; normalization not required
+    V = [0, 0, -1]
+
+    Ia = r[0]
+    Ip = r[1]
+    Ka = r[2]
+    Kd = r[3]
+    Ks = r[4]
+    shine = r[5]
+    I_ambient = Ia * Ka
+    # print "I_ambient: ", I_ambient
+    I_diffuse = Ip * Kd * abs(dot_product(N,L))
+    # print "I_diffuse: ", I_diffuse
+    R = [L[0]+N[0], L[1]+N[1], L[2]+N[2]]
+    mr = vector_magnitude(R) + .0000000000000001
+    R = [R[0]/mr, R[1]/mr, R[2]/mr]
+    I_specular = Ip * Ks * dot_product(R, V)**shine
+    # print "I_specular: ", I_specular
+    rI = I_ambient + I_diffuse + I_specular
+    # print "rI: ", rI
+
+    Ia = g[0]
+    Ip = g[1]
+    Ka = g[2]
+    Kd = g[3]
+    Ks = g[4]
+    shine = g[5]
+    I_ambient = Ia * Ka
+    # print "I_ambient: ", I_ambient
+    I_diffuse = Ip * Kd * abs(dot_product(N,L))
+    # print "I_diffuse: ", I_diffuse
+    R = [L[0]+N[0], L[1]+N[1], L[2]+N[2]]
+    mr = vector_magnitude(R) + .0000000000000001
+    R = [R[0]/mr, R[1]/mr, R[2]/mr]
+    I_specular = Ip * Ks * dot_product(R, V)**shine
+    # print "I_specular: ", I_specular
+    gI = I_ambient + I_diffuse + I_specular
+    # print "rI: ", rI
+
+    Ia = b[0]
+    Ip = b[1]
+    Ka = b[2]
+    Kd = b[3]
+    Ks = b[4]
+    shine = b[5]
+    I_ambient = Ia * Ka
+    # print "I_ambient: ", I_ambient
+    I_diffuse = Ip * Kd * abs(dot_product(N,L))
+    # print "I_diffuse: ", I_diffuse
+    R = [L[0]+N[0], L[1]+N[1], L[2]+N[2]]
+    mr = vector_magnitude(R) + .0000000000000001
+    R = [R[0]/mr, R[1]/mr, R[2]/mr]
+    I_specular = Ip * Ks * dot_product(R, V)**shine
+    # print "I_specular: ", I_specular
+    bI = I_ambient + I_diffuse + I_specular
+    # print "rI: ", rI
+
+    color = [int(rI),int(gI),int(bI)]
+    # color = [int(I),0,0]
+    # print color
+
+    return color
 
 
 #Bresenham's line algorithm
