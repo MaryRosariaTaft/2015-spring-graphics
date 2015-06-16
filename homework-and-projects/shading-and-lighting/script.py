@@ -183,7 +183,7 @@ def parse(commands, knobs = 0):
             add_rect_prism(temp, p[0], p[1], p[2], p[3], p[4], p[5])
         elif(cmd == 'sphere'):
             if(len(p) == 5): #currently takes only 4 parameters; unsure how else to handle (or whether indeed handling properly as is) until last element of list p is utilized
-                add_sphere(temp, p[0], p[1], p[2], p[3], 'z', .05, .1)
+                add_sphere(temp, p[0], p[1], p[2], p[3], 'z', .1, .05)
             elif(len(p) == 6): #same here
                 add_sphere(temp, p[0], p[1], p[2], p[3], p[4], .1, .05)
         elif(cmd == 'torus'):
