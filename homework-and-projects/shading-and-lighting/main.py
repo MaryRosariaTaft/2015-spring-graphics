@@ -3,3 +3,4 @@ from draw import *
 from script import *
 
 run("light-thing.mdl")
+run("test.mdl")
