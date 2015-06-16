@@ -367,26 +367,26 @@ def draw_faces(matrix, screen, color, zbuf):
         if(not is_backface(p0, p1, p2)):
             #PRESENTLY HARD-CODED VALUES (can/should be made variable, eventually, maybe)
             L = [0, 0, -1] #light direction
-            rIa = 200 #ambient intensity
+            rIa = 255 #ambient intensity
             rIp = 255 #point-source intensity
-            rKa = 0.6 #constant of ambient reflection
-            rKd = 0.4 #constant of diffuse reflection
-            rKs = 0.0 #constant of specular reflection
-            rshine = 80 #shininess (exponent on specular-reflection calculation)
+            rKa = 0.4 #constant of ambient reflection
+            rKd = 0.3 #constant of diffuse reflection
+            rKs = 0.3 #constant of specular reflection
+            rshine = 50 #shininess (exponent on specular-reflection calculation)
             r = [rIa, rIp, rKa, rKd, rKs, rshine]
-            gIa = 180
-            gIp = 190
-            gKa = 0.3
-            gKd = 0.0
-            gKs = 0.7
+            gIa = 200
+            gIp = 200
+            gKa = 0.4
+            gKd = 0.3
+            gKs = 0.3
             gshine = 50
             g = [gIa, gIp, gKa, gKd, gKs, gshine]
-            bIa = 120
-            bIp = 140
-            bKa = 0.3
-            bKd = 0.4
-            bKs = 0.3
-            bshine = 70
+            bIa = 255
+            bIp = 255
+            bKa = 0.0
+            bKd = 0.3
+            bKs = 0.7
+            bshine = 200
             b = [bIa, bIp, bKa, bKd, bKs, bshine]
             #note: white light with grayscale reflections: r == g == b
             color = set_color(p0, p1, p2, L, r, g, b)
