@@ -131,7 +131,7 @@ def scan(commands):
         
 def parse(commands, knobs = 0):
     
-    color = [255, 255, 255]
+    color = [218, 165, 32] #hard-coded to match the color values which are hard-coded in draw.py
     screen = new_screen()
     stack = [identity_matrix()]
     zbuf = new_zbuf()
