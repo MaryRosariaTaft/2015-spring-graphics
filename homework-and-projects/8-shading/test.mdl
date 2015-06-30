@@ -1,0 +1,30 @@
+//BOX SHADING TEST
+//
+//frames 20
+//rotate z 180 r
+//vary r 0 20 0 1
+
+//rotate x 30
+//rotate y 20
+//box 0 0 0 130 130 130
+//display
+
+frames 10
+basename discoball
+rotate x 180 r
+vary r 0 10 0 1
+
+rotate x -70
+rotate y 30
+torus 0 0 0 250 30 y
+sphere 0 0 0 100 y
+//box -50 -50 -50 100 100 100
+display
+quit
+
+//box 155 -50 -50 100 100 100
+//box -225 -50 -50 100 100 100
+//push
+//rotate y 90
+//sphere 0 0 0 200 y
+//display
