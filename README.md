@@ -5,4 +5,4 @@ Homework, Spring 2015
 
 Teacher: Mr. Dyrland-Weaver
 
-Languages: C, Python
+Languages: C (barely), Python (mainly)
